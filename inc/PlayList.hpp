@@ -31,6 +31,7 @@ namespace AudioPlayer
         void remove_duplicates();
         void pick_random_track(std::string &mv_track_name) const;
         void get_index_of_track(const std::string &mv_track_name, uint32_t &index) const;
+        const std::vector<std::string> &get_playlist() const;
 
     private:
         std::vector<std::string> m_tracks;

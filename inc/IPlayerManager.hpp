@@ -6,10 +6,11 @@
 
 namespace AudioPlayer
 {
+
     class IPlayerManager
     {
     public:
-        virtual void process_command(std::shared_ptr<const Command>) = 0;
+        virtual void process_command(CommandVariant) = 0;
         virtual ~IPlayerManager(){};
     };
 }

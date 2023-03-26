@@ -57,4 +57,9 @@ namespace AudioPlayer
     {
         // auto iv_it = m_tracks.find(mv_track_name);
     }
+    const std::vector<std::string> &PlayList::get_playlist() const
+    {
+        return m_tracks;
+    }
+
 }

@@ -1,5 +1,8 @@
-#include <iostream>
+#include "Player.hpp"
 
-int main(int, char**) {
-    std::cout << "Hello, world!\n";
+int main()
+{
+    AudioPlayer::Player player;
+    player.run();
+    return 0;
 }

@@ -3,26 +3,21 @@
 #include <iostream>
 #include <variant>
 
-#define DEFINE_COMMAND(commandName)               \
-    class commandName : public Command            \
-    {                                             \
-    public:                                       \
-        const std::string m_name = "commandName"; \
+#define DEFINE_COMMAND(commandName)                \
+    class commandName                              \
+    {                                              \
+    public:                                        \
+        const std::string m_name = "#commandName"; \
     };
 ;
 
 namespace AudioPlayer
 {
 
-    class Command
+    class AddTrackCommand
     {
     public:
-        virtual ~Command(){};
-    };
-
-    class AddTrackCommand : public Command
-    {
-    public:
+        AddTrackCommand(std::string &mv_track_name) : m_track_name(mv_track_name) {}
         const std::string m_name = "AddTrackCommand"; // TODO definir a la compilation
 
         std::string m_track_name;
@@ -32,6 +27,8 @@ namespace AudioPlayer
     DEFINE_COMMAND(RemoveDuplicatesCommand);
 
     DEFINE_COMMAND(PlayPauseCommand);
+    DEFINE_COMMAND(StopCommand);
+
     DEFINE_COMMAND(NextCommand);
     DEFINE_COMMAND(PreviousCommand);
 
@@ -39,13 +36,13 @@ namespace AudioPlayer
     DEFINE_COMMAND(RepeatCommand);
     DEFINE_COMMAND(ShowTrackCommand);
     DEFINE_COMMAND(ShowPlaylistCommand);
-
     using CommandVariant = std::variant<
-        std::shared_ptr<const Command>,
+        std::nullptr_t,
         std::shared_ptr<const AddTrackCommand>,
         std::shared_ptr<const RemoveTrackCommand>,
         std::shared_ptr<const RemoveDuplicatesCommand>,
         std::shared_ptr<const PlayPauseCommand>,
+        std::shared_ptr<const StopCommand>,
         std::shared_ptr<const NextCommand>,
         std::shared_ptr<const PreviousCommand>,
         std::shared_ptr<const RandomCommand>,

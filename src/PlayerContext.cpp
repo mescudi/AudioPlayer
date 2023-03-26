@@ -3,7 +3,7 @@
 namespace AudioPlayer
 {
 
-    PlayerContext::PlayerContext()
+    PlayerContext::PlayerContext() : m_playing_mode(PlayingMode::Normal), m_current_track_name(""), m_current_track_index(0)
     {
     }
     PlayingMode PlayerContext::get_playing_mode() const

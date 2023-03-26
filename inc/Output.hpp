@@ -2,6 +2,7 @@
 #define OUTPUT_HPP
 #include "IOutput.hpp"
 #include "IPlayerContext.hpp"
+#include <vector>
 
 namespace AudioPlayer
 {
@@ -10,14 +11,16 @@ namespace AudioPlayer
 
     public:
         Output(const IPlayerContext &);
-        ~Output();
 
         void display_message(const std::string &mv_message) const override;
-        void display_file_data() const override;
-        void display_added_track(const std::string &mv_track) const override;
+        // void display_track() const override;
+        // void display_added_track(const std::string &mv_track) const override;
         void display_started() const override;
         void display_stopped() const override;
-        void display_resume() const override;
+        // void display_resume() const override;
+        // void display_playlist(const std::vector<std::string> &) const override;
+        void display_repeat() const override;
+        void display_random() const override;
 
     private:
         const IPlayerContext &m_player_context;
