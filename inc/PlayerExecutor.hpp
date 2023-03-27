@@ -14,7 +14,7 @@ namespace AudioPlayer
     class PlayerExecutor : public IPlayerExecutor
     {
     public:
-        PlayerExecutor(IPlayerContext &, const SystemFiles::IConfigSystemFiles &);
+        PlayerExecutor(IPlayerContext &, const SystemFiles::IConfigSystemFiles &, IOutput &);
         void add_track_to_playlist(const std::string &mv_string) override;
         void remove_track(uint32_t) override;
         void remove_duplicates() override;
@@ -34,7 +34,7 @@ namespace AudioPlayer
     private:
         IPlayerContext &m_context;
         const SystemFiles::IConfigSystemFiles &m_system_conf;
-        std::shared_ptr<IOutput> m_output;
+        IOutput &m_output;
         PlayList m_playlist;
     };
 }

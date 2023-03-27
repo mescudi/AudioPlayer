@@ -2,13 +2,14 @@
 #define AUDIO_FILE_META_HPP
 
 #include <chrono>
+#include <string>
+
 namespace SystemFiles
 {
 
     struct AudioFileMetadata // Templatiser
     {
-        // std::chrono::seconds m_seconds; // TODO
-        int m_seconds;
+        std::string m_duration;
         std::string m_codec;
         std::string m_title;
     };

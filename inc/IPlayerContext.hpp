@@ -21,7 +21,7 @@ namespace AudioPlayer
 
         virtual uint32_t get_current_track_index() const = 0;
         virtual void set_current_track_index(uint32_t m_current_track_index) = 0;
-
+        virtual bool is_there_track_to_play() = 0;
         virtual ~IPlayerContext(){};
     };
 }

@@ -33,4 +33,9 @@ namespace AudioPlayer
         m_current_track_index = mv_current_track_index;
     }
 
+    bool PlayerContext::is_there_track_to_play()
+    {
+        return (get_current_track_name() != "");
+    }
+
 }

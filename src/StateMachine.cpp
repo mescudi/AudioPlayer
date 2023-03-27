@@ -4,7 +4,7 @@
 namespace AudioPlayer
 {
 
-    StateMachine::StateMachine(IPlayerExecutor &executor) : m_executor(executor), m_state(Stopped(executor))
+    StateMachine::StateMachine(IPlayerExecutor &executor, IPlayerContext &mv_context) : m_executor(executor), m_context(mv_context), m_state(Stopped(executor))
     {
     }
 
@@ -22,7 +22,7 @@ namespace AudioPlayer
             m_state);
     }
 
-    void StateMachine::start()
+    void StateMachine::start_pause()
     {
         std::visit(
             [&](auto &state)
@@ -30,19 +30,10 @@ namespace AudioPlayer
                 using T = std::decay_t<decltype(state)>;
                 if constexpr (std::is_same_v<T, Stopped> || std::is_same_v<T, Paused>)
                 {
-                    m_state = Started{m_executor};
+                    if (m_context.is_there_track_to_play())
+                        m_state = Started{m_executor};
                 }
-            },
-            m_state);
-    }
-
-    void StateMachine::pause()
-    {
-        std::visit(
-            [&](auto &state)
-            {
-                using T = std::decay_t<decltype(state)>;
-                if constexpr (std::is_same_v<T, Started>)
+                else if constexpr (std::is_same_v<T, Started>)
                 {
                     m_state = Paused{m_executor};
                 }

@@ -19,6 +19,8 @@ namespace AudioPlayer
         uint32_t get_current_track_index() const override;
         void set_current_track_index(uint32_t m_current_track_index) override;
 
+        bool is_there_track_to_play() override;
+
     private:
         PlayingMode m_playing_mode;
         std::string m_current_track_name;

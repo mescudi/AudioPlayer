@@ -22,6 +22,7 @@ namespace AudioPlayer
         const IOutputWriter &m_output_writer;
         std::string m_help_string;
         const std::string m_help = "help";
+        const std::string m_end = "end";
         const std::string m_add_track = "add_track";
         const std::string m_remove_track = "remove_track";
         const std::string m_remove_duplicates = "remove_duplicates";

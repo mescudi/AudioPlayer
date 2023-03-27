@@ -2,14 +2,16 @@
 namespace AudioPlayer
 {
 
-    Output::Output(const IPlayerContext &mv_player_context) : m_player_context(mv_player_context)
+    Output::Output(const IPlayerContext &mv_player_context, const IOutputWriter &mv_output_writer)
+        : m_player_context(mv_player_context),
+          m_output_writer(mv_output_writer)
 
     {
     }
 
     void Output::display_message(const std::string &mv_message) const
     {
-        std::cout << mv_message << std::endl;
+        m_output_writer.display_message(mv_message);
     }
     // void Output::display_track() const
     // {
@@ -36,6 +38,10 @@ namespace AudioPlayer
     void Output::display_stopped() const
     {
         display_message(m_player_context.get_current_track_name() + "Player Stopped ");
+    }
+    void Output::display_paused() const
+    {
+        display_message(m_player_context.get_current_track_name() + "Player Paused ");
     }
 
     void Output::display_repeat() const

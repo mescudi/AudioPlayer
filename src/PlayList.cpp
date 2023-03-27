@@ -15,6 +15,16 @@ namespace AudioPlayer
     {
         m_tracks.push_back(mv_string);
     }
+
+    bool PlayList::is_empty() const
+    {
+        return m_tracks.empty();
+    }
+    uint32_t PlayList::get_number_of_elements() const
+    {
+        return m_tracks.size();
+    }
+
     void PlayList::remove_track(uint32_t mv_index)
     {
 

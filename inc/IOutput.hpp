@@ -12,6 +12,8 @@ namespace AudioPlayer
         // virtual void display_added_track(const std::string &mv_track_name) const = 0;
         virtual void display_started() const = 0;
         virtual void display_stopped() const = 0;
+        virtual void display_paused() const = 0;
+
         // virtual void display_resume() const = 0;
         // virtual void display_playlist(const std::vector<std::string> &) const = 0;
         virtual void display_repeat() const = 0;

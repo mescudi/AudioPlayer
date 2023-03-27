@@ -2,6 +2,7 @@
 #define STATE_MACHINE_HPP
 #include <variant>
 #include "IPlayerExecutor.hpp"
+#include "IPlayerContext.hpp"
 
 namespace AudioPlayer
 {
@@ -38,14 +39,14 @@ namespace AudioPlayer
     class StateMachine
     {
     public:
-        StateMachine(IPlayerExecutor &mv_player_executor);
+        StateMachine(IPlayerExecutor &mv_player_executor, IPlayerContext &mv_context);
         void stop();
-        void start();
-        void pause();
+        void start_pause();
 
     private:
         State m_state;
         IPlayerExecutor &m_executor;
+        IPlayerContext &m_context;
     };
 }
 #endif

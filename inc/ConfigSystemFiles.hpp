@@ -19,10 +19,10 @@ namespace SystemFiles
     {
     private:
         std::map<std::string, AudioFileMetadata> conf_map{
-            {"01_intro.music", AudioFileMetadata{180, "mp3", "Introduction"}},
-            {"02_running.music", AudioFileMetadata{120, "wav", "Running"}},
-            {"03_suspens.music", AudioFileMetadata{60, "Flac", "Suspens"}},
-            {"04_end.music", AudioFileMetadata{180, "mp3", "End"}}
+            {"01_intro.music", AudioFileMetadata{"1:20:15", "mp3", "Introduction"}},
+            {"02_running.music", AudioFileMetadata{"00:13:14", "wav", "Running"}},
+            {"03_suspens.music", AudioFileMetadata{"00:00:60", "Flac", "Suspens"}},
+            {"04_end.music", AudioFileMetadata{"00:00:09", "mp3", "End"}}
 
         };
 

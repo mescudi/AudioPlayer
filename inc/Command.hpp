@@ -3,13 +3,12 @@
 #include <iostream>
 #include <variant>
 
-#define DEFINE_COMMAND(commandName)                \
-    class commandName                              \
-    {                                              \
-    public:                                        \
-        const std::string m_name = "#commandName"; \
+#define DEFINE_COMMAND(commandName)              \
+    class commandName                            \
+    {                                            \
+    public:                                      \
+        const std::string m_name = #commandName; \
     };
-;
 
 namespace AudioPlayer
 {
@@ -23,6 +22,7 @@ namespace AudioPlayer
         std::string m_track_name;
     };
 
+    DEFINE_COMMAND(EndCommand);
     DEFINE_COMMAND(RemoveTrackCommand);
     DEFINE_COMMAND(RemoveDuplicatesCommand);
 
@@ -36,6 +36,7 @@ namespace AudioPlayer
     DEFINE_COMMAND(RepeatCommand);
     DEFINE_COMMAND(ShowTrackCommand);
     DEFINE_COMMAND(ShowPlaylistCommand);
+
     using CommandVariant = std::variant<
         std::nullptr_t,
         std::shared_ptr<const AddTrackCommand>,
@@ -46,6 +47,7 @@ namespace AudioPlayer
         std::shared_ptr<const NextCommand>,
         std::shared_ptr<const PreviousCommand>,
         std::shared_ptr<const RandomCommand>,
+        std::shared_ptr<const EndCommand>,
         std::shared_ptr<const RepeatCommand>,
         std::shared_ptr<const ShowTrackCommand>,
         std::shared_ptr<const ShowPlaylistCommand>>;
