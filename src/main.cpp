@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-int main()
+uint32_t main()
 {
     AudioPlayer::Player player;
     player.run();

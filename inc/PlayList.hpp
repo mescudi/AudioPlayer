@@ -10,34 +10,71 @@ namespace AudioPlayer
     {
     public:
         PlayList();
+        /**
+         * @brief Adds a new track to the playlist.
+         * @param mv_string The name of the track to add.
+         */
         void add_track(const std::string &mv_string);
+
+        /**
+         * @brief Removes a track from the playlist.
+         * @param mv_index The index of the track to remove.
+         */
         void remove_track(uint32_t mv_index);
 
         /**
-         * the function iterates through the original vector and adds each element
-         *  to the set if it hasn't already been seen. The insert method of the set
-         *  returns a pair containing an iterator to the inserted element and a boolean
-         * indicating whether the insertion took place (i.e., whether the element was not already present).
-         * If the element was inserted into the set, the function also adds it to the result vector.
-
-        Finally, the function replaces the original vector with the result vector,
-         which contains only the unique elements in the original order.
-
-        Note that this method uses a set to store the unique elements,
-         which ensures that each element will be present only once.
-         However, the set does not preserve the original order of the elements,
-         which is why we also use a vector to store the elements in the original order.
-        */
+         * @brief Removes duplicate tracks from the playlist.
+         *
+         * The function iterates through the original vector and adds each element to the set
+         * if it hasn't already been seen. The insert method of the set returns a pair containing
+         * an iterator to the inserted element and a boolean indicating whether the insertion took
+         * place (i.e., whether the element was not already present). If the element was inserted
+         * into the set, the function also adds it to the result vector.
+         *
+         * Finally, the function replaces the original vector with the result vector,
+         * which contains only the unique elements in the original order.
+         *
+         * Note that this method uses a set to store the unique elements, which ensures that each
+         * element will be present only once. However, the set does not preserve the original order
+         * of the elements, which is why we also use a vector to store the elements in the original order.
+         */
         void remove_duplicates();
+
+        /**
+         * @brief Picks a random track from the playlist.
+         * @param mv_track_name A reference to a string that will contain the name of the picked track.
+         */
         void pick_random_track(std::string &mv_track_name) const;
+
+        /**
+         * @brief Gets the index of a track in the playlist.
+         * @param mv_track_name The name of the track to get the index of.
+         * @param index A reference to a uint32_t that will contain the index of the track.
+         */
         void get_index_of_track(const std::string &mv_track_name, uint32_t &index) const;
+
+        /**
+         * @brief Gets a const reference to the vector of tracks in the playlist.
+         * @return A const reference to the vector of tracks in the playlist.
+         */
         const std::vector<std::string> &get_playlist() const;
+
+        /**
+         * @brief Checks whether the playlist is empty.
+         * @return True if the playlist is empty, false otherwise.
+         */
         bool is_empty() const;
+
+        /**
+         * @brief Gets the number of elements in the playlist.
+         * @return The number of elements in the playlist.
+         */
         uint32_t get_number_of_elements() const;
 
     private:
-        std::vector<std::string> m_tracks;
+        std::vector<std::string> m_tracks; ///< The vector of tracks in the playlist.
     };
+
 }
 
 #endif

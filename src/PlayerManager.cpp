@@ -55,19 +55,22 @@ namespace AudioPlayer
     }
     void PlayerManager::handleCommand(std::shared_ptr<const NextCommand> cmd)
     {
+        // appeler le visitor correspondant
+        m_state_machine.next();
     }
     void PlayerManager::handleCommand(std::shared_ptr<const PreviousCommand> cmd)
     {
+        m_state_machine.previous();
     }
 
     void PlayerManager::handleCommand(std::shared_ptr<const RandomCommand> cmd)
     {
-        m_executor.random();
+        m_state_machine.set_random();
     }
     void PlayerManager::handleCommand(std::shared_ptr<const RepeatCommand> cmd)
     {
         LOG("DEV", cmd->m_name);
-        m_executor.repeat();
+        m_state_machine.set_repeat();
     }
 
     void PlayerManager::handleCommand(std::shared_ptr<const ShowTrackCommand> cmd)

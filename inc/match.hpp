@@ -5,26 +5,38 @@
 
 namespace match // TODO lib
 {
-    // std visit page applied  std to a variant
-    /***/
-    // allows
-    /**--------------------------------
+    /**
+     * @brief Allows visiting a std::variant using a lambda function, with less verbose syntax.
+     *
+     * This function simplifies the syntax of visiting a std::variant object by allowing the use of lambda functions,
+     * without the need to define a separate struct or class with operator() overloaded for each type in the variant.
+     *
+     * Example usage:
+     *
+     * @code{.cpp}
      * variant<int,float> myVar{2.5f};
-     * visit(overloaded{
-     * [](int i ){}
-     * [](float  f ){}
-     * },myVar);
-     * --------------------------------
-     * instead of
-     * --------------------------------
+     * match(myVar,
+     *     [](int i) { // handle int value },
+     *     [](float f) { // handle float value }
+     * );
+     * @endcode
+     *
+     * This is equivalent to:
+     *
+     * @code{.cpp}
      * variant<int,float> myVar{2.5f};
-     * struct Visitor
-     * {
-     * void operator()(int i ) {}
-     * void operator()(float f) {}
+     * struct Visitor {
+     *     void operator()(int i) { // handle int value }
+     *     void operator()(float f) { // handle float value }
      * };
-     * visitor(Visitor{},myVar);
-     * --------------------------------
+     * visitor(Visitor{}, myVar);
+     * @endcode
+     *
+     * @tparam Variant   A std::variant object.
+     * @tparam Matchers  A list of lambda functions that will be called to handle each variant type.
+     * @param variant    A std::variant object.
+     * @param matchers   A list of lambda functions, one for each possible type in the variant.
+     * @return The result of calling the matching lambda function on the variant object.
      */
     namespace detail
     {
@@ -40,17 +52,6 @@ namespace match // TODO lib
 
     } // namespace detail
 
-    /**
-     * used to avoid the , myVar at the end   visitor(Visitor{},myVar); so that it is at the beginning just to be reader friendly
-     * so you can write
-     *
-     * variant<int,float,...> myVar{2.5f};
-     * match(var{
-     * [](int i ){}
-     * [](float  f ){}
-     * });
-     *
-     * */
     template <typename Variant, typename... Matchers>
     auto match(Variant &&variant, Matchers &&...matchers)
     {

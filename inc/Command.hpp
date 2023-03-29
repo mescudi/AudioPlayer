@@ -1,42 +1,65 @@
-#ifndef COMMAND_HPP // include guard
+
+#ifndef COMMAND_HPP
 #define COMMAND_HPP
+/**
+
+@file Command.hpp
+@brief This file contains the declaration of the Command class and its related classes.
+*/
 #include <iostream>
 #include <variant>
+#include <memory>
 
+/**
+
+*@brief The namespace containing all classes related to the AudioPlayer system.
+*/
+namespace AudioPlayer
+{
+    /*
+
+    *@brief The AddTrackCommand class represents a command to add a track to the playlist.
+    */
+    class AddTrackCommand
+    {
+    public:
+        /*
+
+        @brief Construct a new AddTrackCommand object.
+        @param mv_track_name The name of the track to add to the playlist.
+        */
+        AddTrackCommand(std::string &mv_track_name) : m_track_name(mv_track_name) {}
+        const std::string m_name = "AddTrackCommand"; /*!< The name of the command. */
+        std::string m_track_name;                     /*!< The name of the track to add to the playlist. */
+    };
+
+/**
+ *@brief Macro to define a command class with its name as the macro argument.
+ */
 #define DEFINE_COMMAND(commandName)              \
     class commandName                            \
     {                                            \
     public:                                      \
         const std::string m_name = #commandName; \
     };
+    DEFINE_COMMAND(EndCommand);              /*!< The command to end the AudioPlayer. */
+    DEFINE_COMMAND(RemoveTrackCommand);      /*!< The command to remove a track from the playlist. */
+    DEFINE_COMMAND(RemoveDuplicatesCommand); /**< The command to remove duplicate tracks from the playlist. */
 
-namespace AudioPlayer
-{
+    DEFINE_COMMAND(PlayPauseCommand); /*!< The command to play or pause the current track. */
+    DEFINE_COMMAND(StopCommand);      /*!< The command to stop the AudioPlayer. */
 
-    class AddTrackCommand
-    {
-    public:
-        AddTrackCommand(std::string &mv_track_name) : m_track_name(mv_track_name) {}
-        const std::string m_name = "AddTrackCommand"; // TODO definir a la compilation
+    DEFINE_COMMAND(NextCommand);     /*!< The command to play the next track in the playlist. */
+    DEFINE_COMMAND(PreviousCommand); /*!< The command to play the previous track in the playlist. */
 
-        std::string m_track_name;
-    };
+    DEFINE_COMMAND(RandomCommand);       /*!< The command to play a random track from the playlist. */
+    DEFINE_COMMAND(RepeatCommand);       /*!< The command to repeat the current track. */
+    DEFINE_COMMAND(ShowTrackCommand);    /*!< The command to show the details of the current track. */
+    DEFINE_COMMAND(ShowPlaylistCommand); /*!< The command to show the tracks in the playlist. */
 
-    DEFINE_COMMAND(EndCommand);
-    DEFINE_COMMAND(RemoveTrackCommand);
-    DEFINE_COMMAND(RemoveDuplicatesCommand);
-
-    DEFINE_COMMAND(PlayPauseCommand);
-    DEFINE_COMMAND(StopCommand);
-
-    DEFINE_COMMAND(NextCommand);
-    DEFINE_COMMAND(PreviousCommand);
-
-    DEFINE_COMMAND(RandomCommand);
-    DEFINE_COMMAND(RepeatCommand);
-    DEFINE_COMMAND(ShowTrackCommand);
-    DEFINE_COMMAND(ShowPlaylistCommand);
-
+    /**
+     *@brief A variant type to store all possible command types.
+     **/
     using CommandVariant = std::variant<
         std::nullptr_t,
         std::shared_ptr<const AddTrackCommand>,
@@ -52,5 +75,4 @@ namespace AudioPlayer
         std::shared_ptr<const ShowTrackCommand>,
         std::shared_ptr<const ShowPlaylistCommand>>;
 }
-
 #endif

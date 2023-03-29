@@ -2,11 +2,11 @@
 #define LOGGER_HPP
 #include <iostream>
 
-// définition de la macro pour activer le logger
+// definition of macro to activate logger
 // #define ENABLE_LOGGER
 // TODO :Replace with variadic template
-// Enable set at compile time
-#define ENABLE_LOGGER // TODO A la compil
+// Enable set at compile time in Cmake
+#define ENABLE_LOGGER
 #ifdef ENABLE_LOGGER
 #define LOG(level, message) std::cout << "Log [" << level << "]" \
                                       << " (" << __FUNCTION__ << "): " << message << std::endl

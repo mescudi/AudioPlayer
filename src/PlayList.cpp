@@ -28,7 +28,7 @@ namespace AudioPlayer
     void PlayList::remove_track(uint32_t mv_index)
     {
 
-        if (mv_index < 0 || mv_index >= m_tracks.size())
+        if (mv_index < 0 || mv_index >= m_tracks.size()) // check if indev is not invalid
         {
             // Invalid Index
             return;
@@ -58,8 +58,8 @@ namespace AudioPlayer
             m_tracks.begin(),
             m_tracks.end(),
             std::back_inserter(out),
-            1, // 1 element
-            std::mt19937{std::random_device{}()});
+            1,
+            std::mt19937{std::random_device{}()}); // get 1 element random between the first and last element of vector return in out vector
         mv_track_name = out.front();
     }
 

@@ -6,11 +6,16 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
-
+#include <algorithm>
 namespace Time
 {
+    /**
 
-    // Converts a string representing a duration into a std::chrono::duration
+    @brief Parses a string representing a duration (hh:mm:ss) and returns the duration in seconds.
+    @param duration_str The string representing the duration in format hh:mm:ss.
+    @return std::chrono::seconds The duration in seconds.
+    @throw std::invalid_argument If the string is not in the expected format (hh:mm:ss).
+    */
     static std::chrono::seconds duration_from_string(const std::string &duration_str)
     {
         std::istringstream iss(duration_str);
@@ -30,9 +35,13 @@ namespace Time
         return std::chrono::hours(hours) + std::chrono::minutes(minutes) + std::chrono::seconds(seconds);
     }
 
-    // Computes the total duration from a vector of strings representing durations
+    /**
 
-    // Computes the total duration from a vector of strings representing durations
+    @brief Computes the total duration from a vector of strings representing durations (hh:mm:ss).
+    @param durations A vector of strings representing the durations in format hh:mm:ss.
+    @return std::string The total duration in format hh:mm:ss.
+    @throw std::invalid_argument If any of the strings is not in the expected format (hh:mm:ss).
+    */
     static std::string total_duration_string(const std::vector<std::string> &durations)
     {
         std::chrono::seconds total_seconds = std::chrono::seconds(0);

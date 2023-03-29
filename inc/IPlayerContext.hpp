@@ -1,28 +1,46 @@
 #ifndef IPLAYER_CONTEXT_HPP // include guard
 #define IPLAYER_CONTEXT_HPP
 #include <iostream>
-namespace AudioPlayer
+/**
+ * @class IPlayerContext
+ * @brief Interface for the audio player context.
+ */
+class IPlayerContext
 {
-    enum class PlayingMode
-    {
-        Random,
-        Repeat,
-        Normal
-    };
+public:
+    /**
+     * @brief Gets the name of the current track being played.
+     * @return The name of the current track being played.
+     */
+    virtual std::string get_current_track_name() const = 0;
 
-    class IPlayerContext // TODO sortir
-    {
-    public:
-        virtual PlayingMode get_playing_mode() const = 0;
-        virtual void set_playing_mode(const PlayingMode &) = 0;
+    /**
+     * @brief Sets the name of the current track being played.
+     * @param m_current_track_name The name of the current track being played.
+     */
+    virtual void set_current_track_name(const std::string &m_current_track_name) = 0;
 
-        virtual std::string get_current_track_name() const = 0;
-        virtual void set_current_track_name(const std::string &) = 0;
+    /**
+     * @brief Gets the index of the current track being played.
+     * @return The index of the current track being played.
+     */
+    virtual uint32_t get_current_track_index() const = 0;
 
-        virtual uint32_t get_current_track_index() const = 0;
-        virtual void set_current_track_index(uint32_t m_current_track_index) = 0;
-        virtual bool is_there_track_to_play() = 0;
-        virtual ~IPlayerContext(){};
-    };
-}
+    /**
+     * @brief Sets the index of the current track being played.
+     * @param m_current_track_index The index of the current track being played.
+     */
+    virtual void set_current_track_index(uint32_t m_current_track_index) = 0;
+
+    /**
+     * @brief Determines whether there is a track to play.
+     * @return True if there is a track to play, false otherwise.
+     */
+    virtual bool is_there_track_to_play() = 0;
+
+    /**
+     * @brief Destructor.
+     */
+    virtual ~IPlayerContext(){};
+};
 #endif
