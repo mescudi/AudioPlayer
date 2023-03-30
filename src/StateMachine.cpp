@@ -8,20 +8,25 @@ namespace AudioPlayer
     StateMachine::StateMachine(IPlayerExecutor &executor, IPlayerContext &mv_context)
         : m_executor(executor),
           m_context(mv_context),
-          m_state(State{Stopped{m_executor}})
+          m_state(State{Stopped{}})
+    //   ,m_playing_strategy(std::in_place_index<0>, NormalPlayingStrategy{})
     {
-        m_playing_mode = std::make_unique<PlayingMode>(std::make_unique<NormalPlayingStrategy>(std::make_shared<PlayerExecutor>(m_executor)));
     }
 
     void StateMachine::stop()
     {
-        std::visit( // when stop is received visits the state, if State is of type Started, the state is now Stopped type
-            [&](auto &state)
+        std::visit(
+            [this](auto &state)
             {
                 using T = std::decay_t<decltype(state)>;
-                if constexpr (std::is_same_v<T, Started>)
+                if constexpr (std::is_same_v<T, Started> || std::is_same_v<T, Paused>)
                 {
-                    m_state = State{Stopped{m_executor}};
+                    m_state = State{Stopped{}};
+                    // std::visit([this](auto &new_state)
+                    //            { new_state.exec_state(this->m_executor); },
+                    //            m_state);
+                    auto iv_state = std::get<Stopped>(m_state);
+                    iv_state.exec_stop(m_executor);
                 }
             },
             m_state);
@@ -30,17 +35,20 @@ namespace AudioPlayer
     void StateMachine::start_pause()
     {
         std::visit(
-            [&](auto &state)
+            [this](auto &state)
             {
                 using T = std::decay_t<decltype(state)>;
-                if constexpr (std::is_same_v<T, Stopped> || std::is_same_v<T, Paused>) // when start_pause is received visits the state, if State is of type Stopped or Pause, the state is now Started type
+                if constexpr (std::is_same_v<T, Stopped> || std::is_same_v<T, Paused>)
                 {
-                    if (m_context.is_there_track_to_play())
-                        m_state = State{Started{m_executor}};
+                    m_state = State{Started{}};
+                    auto iv_state = std::get<Started>(m_state);
+                    iv_state.exec_start(m_executor);
                 }
-                else if constexpr (std::is_same_v<T, Started>) // on the contrary if it was Started it is now of type Paused
+                if constexpr (std::is_same_v<T, Started>)
                 {
-                    m_state = State{Paused{m_executor}};
+                    m_state = State{Paused{}};
+                    auto iv_state = std::get<Paused>(m_state);
+                    iv_state.exec_pause(m_executor);
                 }
             },
             m_state);
@@ -48,76 +56,55 @@ namespace AudioPlayer
 
     void StateMachine::set_random()
     {
-        decltype(auto) result = std::visit(
-            [](auto &mode)
-            {
-                using T = std::decay_t<decltype(mode)>;
-                if constexpr (std::is_same_v<T, NormalPlayingStrategy> || std::is_same_v<T, RepeatPlayingStrategy>)
-                {
-                    m_playing_mode = RandomPlayingStrategy{std::make_shared<PlayerExecutor>(m_executor)};
-                }
-            },
-            m_playing_mode);
+        // std::visit(
+        //     [&](auto &mode)
+        //     {
+        //         using T = std::decay_t<decltype(mode)>;
+        //         if constexpr (std::is_same_v<T, RandomPlayingStrategy>)
+        //         {
+        //             // return to normal
+        //             m_playing_strategy = NormalPlayingStrategy{};
+        //         }
+        //         else if constexpr (std::is_same_v<T, NormalPlayingStrategy> || std::is_same_v<T, RepeatPlayingStrategy>)
+        //         {
+        //             m_playing_strategy = RandomPlayingStrategy{};
+        //         }
+        //     },
+        //     m_playing_strategy);
     }
 
     void StateMachine::set_repeat()
     {
-        std::visit(
-            [&](auto &mode)
-            {
-                using T = std::decay_t<decltype(mode)>;
-                if constexpr (std::is_same_v<T, RepeatPlayingStrategy>)
-                {
-                    if (m_context.is_there_track_to_play())
-                    {
-                        m_playing_mode = NormalPlayingStrategy{std::make_shared<PlayerExecutor>(m_executor)};
-                    }
-                }
-                else if constexpr (std::is_same_v<T, NormalPlayingStrategy> || std::is_same_v<T, RandomPlayingStrategy>)
-                {
-                    m_playing_mode = RepeatPlayingStrategy{std::make_shared<PlayerExecutor>(m_executor)};
-                }
-            },
-            m_playing_mode);
+        // std::visit(
+        //     [&](auto &mode)
+        //     {
+        //         using T = std::decay_t<decltype(mode)>;
+        //         if constexpr (std::is_same_v<T, RepeatPlayingStrategy>)
+        //         {
+        //             // return to normal
+        //             m_playing_strategy = NormalPlayingStrategy{};
+        //         }
+        //         else if constexpr (std::is_same_v<T, NormalPlayingStrategy> || std::is_same_v<T, RandomPlayingStrategy>)
+        //         {
+        //             m_playing_strategy = RepeatPlayingStrategy{};
+        //         }
+        //     },
+        //     m_playing_strategy);
     }
 
     void StateMachine::next()
     {
-        std::visit([&](auto &strategy)
-                   {
-        using T = std::decay_t<decltype(strategy)>;
-        if constexpr (std::is_same_v<T, NormalPlayingStrategy>)
-        {
-            strategy.next();
-        }
-        else if constexpr (std::is_same_v<T, RandomPlayingStrategy>)
-        {
-            strategy.random();
-        }
-        else if constexpr (std::is_same_v<T, RepeatPlayingStrategy>)
-        {
-            strategy.repeat_current();
-        } },
-                   m_playing_mode);
+        // std::visit([this](auto &strategy) {  // capture 'this' explicitly
+        //     strategy.next(this->m_executor); // access m_executor through the captured pointer
+        // },
+        //            m_playing_strategy);
     }
 
     void StateMachine::previous()
     {
-        std::visit([&](auto &strategy)
-                   {
-        using T = std::decay_t<decltype(strategy)>;
-        if constexpr (std::is_same_v<T, NormalPlayingStrategy>)
-        {
-            strategy.previous();
-        }
-        else if constexpr (std::is_same_v<T, RandomPlayingStrategy>)
-        {
-            strategy.random();
-        }
-        else if constexpr (std::is_same_v<T, RepeatPlayingStrategy>)
-        {
-            strategy.repeat_current();
-        } },
-                   m_playing_mode);
+        // std::visit([this](auto &strategy) {  // capture 'this' explicitly
+        //     strategy.next(this->m_executor); // access m_executor through the captured pointer
+        // },
+        //            m_playing_strategy);
     }
 }

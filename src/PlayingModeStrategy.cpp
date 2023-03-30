@@ -4,32 +4,32 @@
 namespace AudioPlayer
 {
 
-    NormalPlayingStrategy::NormalPlayingStrategy(std::shared_ptr<IPlayerExecutor> mv_executor) : m_executor(mv_executor)
+    NormalPlayingStrategy::NormalPlayingStrategy()
     {
     }
-    void NormalPlayingStrategy::previous()
+    void NormalPlayingStrategy::previous(IPlayerExecutor &mv_executor)
     {
-        m_executor->set_previous_track(); // the strategy in normal mode when previous is called is to play the previous track
+        mv_executor.set_previous_track(); // the strategy in normal mode when previous is called is to play the previous track
     }
-    void NormalPlayingStrategy::next()
+    void NormalPlayingStrategy::next(IPlayerExecutor &mv_executor)
     {
-        m_executor->set_next_track(); // the strategy in normal mode when next is called is to play the next track
-    }
-
-    RandomPlayingStrategy::RandomPlayingStrategy(std::shared_ptr<IPlayerExecutor> mv_executor) : m_executor(mv_executor)
-    {
-    }
-    void RandomPlayingStrategy::random()
-    {
-        m_executor->set_random_track(); // the strategy in random mode will be to find a random track for the next and the previous calls
+        mv_executor.set_next_track(); // the strategy in normal mode when next is called is to play the next track
     }
 
-    RepeatPlayingStrategy::RepeatPlayingStrategy(std::shared_ptr<IPlayerExecutor> mv_executor) : m_executor(mv_executor)
+    RandomPlayingStrategy::RandomPlayingStrategy()
     {
     }
-    void RepeatPlayingStrategy::repeat_current()
+    void RandomPlayingStrategy::next(IPlayerExecutor &mv_executor)
     {
-        m_executor->set_same_track(); // the strategy in repeat mode will be used to play the same track for the next and the previous calls
+        mv_executor.set_random_track(); // the strategy in normal mode when previous is called is to play the previous track
+    }
+
+    RepeatPlayingStrategy::RepeatPlayingStrategy()
+    {
+    }
+    void RepeatPlayingStrategy::next(IPlayerExecutor &mv_executor)
+    {
+        mv_executor.set_same_track(); // the strategy in normal mode when previous is called is to play the previous track
     }
 
 }

@@ -11,45 +11,57 @@ namespace AudioPlayer
     /**
      * @brief A structure representing the stopped state of the state machine
      */
-    struct Stopped
+    class Stopped
     {
+    public:
         /**
          * @brief Constructs a Stopped object and stops the player
-         * @param executor The player executor object
          */
-        Stopped(IPlayerExecutor &executor)
+        Stopped()
         {
-            executor.stop();
+        }
+
+        void exec_stop(IPlayerExecutor &mv_executor)
+        {
+            mv_executor.stop();
         }
     };
 
     /**
      * @brief A structure representing the started state of the state machine
      */
-    struct Started
+    class Started
     {
+    public:
         /**
          * @brief Constructs a Started object and starts the player
-         * @param executor The player executor object
          */
-        Started(IPlayerExecutor &executor)
+        Started()
         {
-            executor.start();
+        }
+
+        void exec_start(IPlayerExecutor &mv_executor)
+        {
+            mv_executor.start();
         }
     };
 
     /**
      * @brief A structure representing the paused state of the state machine
      */
-    struct Paused
+    class Paused
     {
+    public:
         /**
          * @brief Constructs a Paused object and pauses the player
-         * @param executor The player executor object
          */
-        Paused(IPlayerExecutor &executor)
+        Paused()
         {
-            executor.pause();
+        }
+
+        void exec_pause(IPlayerExecutor &mv_executor)
+        {
+            mv_executor.pause();
         }
     };
 
@@ -60,14 +72,14 @@ namespace AudioPlayer
         Started,
         Stopped,
         Paused>;
-
-    /**
-     * @brief A variant representing the possible playing modes of the state machine
+    /*
+     *
+     *@brief A variant representing the possible playing modes which are like states in the states machines
      */
-    using PlayingMode = std::variant<
+    using PlayingModeStrategy = std::variant<
         NormalPlayingStrategy,
-        RandomPlayingStrategy,
-        RepeatPlayingStrategy>;
+        RepeatPlayingStrategy,
+        RandomPlayingStrategy>;
 
     /**
      * @brief The StateMachine class represents the state machine of the audio player
@@ -113,8 +125,9 @@ namespace AudioPlayer
         void previous();
 
     private:
-        State m_state;                               /**< The current state of the state machine */
-        std::unique_ptr<PlayingMode> m_playing_mode; /**< The current playing mode of the state machine */
+        State m_state; /**< The current state of the state machine */
+
+        // PlayingModeStrategy m_playing_strategy; /**< The current playing mode of the state machine */
 
         IPlayerExecutor &m_executor; /**< The player executor object */
         IPlayerContext &m_context;   /**< The player context object */

@@ -11,11 +11,13 @@ namespace AudioPlayer
                                                                           m_state_machine(m_executor, m_context)
 
     {
+        std::cout << "on passe icid" << std::endl;
+
         displaySystemFiles();
     }
 
     void PlayerManager::process_command(CommandVariant mv_cmd)
-    {
+    { /* thanks to type of contained in CommandVariant, will redirect to the adequat handleCommand */
         std::visit([this](auto &&cmd)
                    { this->handleCommand(cmd); },
                    mv_cmd);

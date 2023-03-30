@@ -1,85 +1,70 @@
-#ifndef PLAYING_MODE_STRATEGY_EXECUTOR_HPP // include guard
-#define PLAYING_MODE_STRATEGY_EXECUTOR_HPP
-#include "PlayingMode.hpp"
+#ifndef PLAYING_MODE_STRATEGY_HPP // include guard
+#define PLAYING_MODE_STRATEGY_HPP
 #include "IPlayerExecutor.hpp"
 #include <memory>
 namespace AudioPlayer
 {
-    // class PlayingModeStrategy
+    // class PlayingModeStrategyAbstract
     // {
 
     // public:
-    //     virtual ~PlayingModeStrategy(){};
-    //     PlayingModeStrategy(IPlayerExecutor &);
+    //     virtual ~PlayingModeStrategyAbstract(){};
+    //     PlayingModeStrategyAbstract(IPlayerExecutor);
+
+    //     virtual void previous() = 0;
+    //     virtual void next() = 0;
 
     // protected:
-    //     IPlayerExecutor &m_executor;
+    //     PlayerExecutor m_executor;
     // };
 
     /**
      * @brief Implements the Normal playing strategy.
      */
-    class NormalPlayingStrategy
+    class NormalPlayingStrategy // : public PlayingModeStrategyAbstract
     {
 
     public:
-        NormalPlayingStrategy(std::shared_ptr<IPlayerExecutor>);
+        NormalPlayingStrategy();
         /**
          * @brief Switches to the previous track in the playlist.
          */
-        void previous();
+        void previous(IPlayerExecutor &);
 
         /**
          * @brief Switches to the next track in the playlist.
          */
-        void next();
-
-    private:
-        std::shared_ptr<IPlayerExecutor> m_executor; /**< The executor to use for playing the tracks. */
+        void next(IPlayerExecutor &);
     };
 
     /**
      * @brief Implements the Random playing strategy.
      */
-    class RandomPlayingStrategy
+    class RandomPlayingStrategy // : public PlayingModeStrategyAbstract
     {
     public:
         /**
-         * @brief Construct a new Random Playing Strategy object.
+         * @brief Constructor of Random Playing Strategy object.
          *
-         * @param executor The executor to use for playing the tracks.
+
          */
-        RandomPlayingStrategy(std::shared_ptr<IPlayerExecutor> executor);
+        RandomPlayingStrategy();
 
         /**
          * @brief Switches to a random track in the playlist.
          */
-        void random();
-
-    private:
-        std::shared_ptr<IPlayerExecutor> m_executor; /**< The executor to use for playing the tracks. */
+        void next(IPlayerExecutor &);
     };
 
     /**
      * @brief Implements the Repeat playing strategy.
      */
-    class RepeatPlayingStrategy
+    class RepeatPlayingStrategy //: public PlayingModeStrategyAbstract
     {
     public:
-        /**
-         *
-         * @param executor The executor to use for playing the tracks.
-         */
-        RepeatPlayingStrategy(std::shared_ptr<IPlayerExecutor> executor);
+        RepeatPlayingStrategy();
 
-        /**
-         * @brief Repeats the current track.
-         */
-        void repeat_current();
-
-    private:
-        std::shared_ptr<IPlayerExecutor> m_executor; /**< The executor to use for playing the tracks. */
+        void next(IPlayerExecutor &);
     };
-
 }
 #endif

@@ -5,7 +5,6 @@
 #include "IPlayerContext.hpp"
 #include "IPlayerManager.hpp"
 #include "PlayList.hpp"
-#include "StateMachine.hpp"
 #include "IOutput.hpp"
 #include "ConfigSystemFiles.hpp"
 

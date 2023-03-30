@@ -26,7 +26,7 @@ namespace AudioPlayer
     }
     void PlayerExecutor::resume()
     {
-        m_output.display_resumed();
+        // m_output.display_resumed();
     }
 
     // Add track to playlist method
@@ -75,16 +75,7 @@ namespace AudioPlayer
 
         m_playlist.remove_duplicates();
     }
-    // void PlayerExecutor::random()
-    // {
-    //     m_context.set_playing_mode(PlayingMode::Random);
-    //     m_output.display_random();
-    // }
-    // void PlayerExecutor::repeat()
-    // {
-    //     m_context.set_playing_mode(PlayingMode::Repeat);
-    //     m_output.display_repeat();
-    // }
+
     void PlayerExecutor::show_track()
     {
         if (m_playlist.is_empty())
@@ -153,9 +144,11 @@ namespace AudioPlayer
     }
     void PlayerExecutor::set_random_track()
     {
+        m_output.display_random();
     }
     void PlayerExecutor::set_same_track()
     {
+        m_output.display_repeat();
     }
 
 }

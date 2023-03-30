@@ -3,7 +3,6 @@
 #include <iostream>
 #include "IPlayerContext.hpp"
 #include "IConfigSystemFiles.hpp"
-#include "PlayingMode.hpp"
 
 namespace AudioPlayer
 {

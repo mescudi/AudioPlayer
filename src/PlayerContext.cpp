@@ -5,6 +5,7 @@ namespace AudioPlayer
 
     PlayerContext::PlayerContext() : m_current_track_name(""), m_current_track_index(0) // current track initialized to "" before a  track is added
     {
+        std::cout << "on passe iciPlayerContext" << std::endl;
     }
     // PlayingMode PlayerContext::get_playing_mode() const
     // {

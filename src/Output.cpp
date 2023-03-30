@@ -7,6 +7,7 @@ namespace AudioPlayer
           m_output_writer(mv_output_writer)
 
     {
+        std::cout << "On passe cela" << std::endl;
     }
 
     void Output::display_message(const std::string &mv_message) const
