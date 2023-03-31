@@ -36,6 +36,7 @@ namespace AudioPlayer
         const std::string m_help = "help";                           ///< The command string for displaying the help message
         const std::string m_end = "end";                             ///< The command string for ending the player
         const std::string m_add_track = "add_track";                 ///< The command string for adding a track
+        const std::string m_add_all_tracks = "add_all_tracks";       ///< The command string for to add all systems tracks to playlist
         const std::string m_remove_track = "remove_track";           ///< The command string for removing a track
         const std::string m_remove_duplicates = "remove_duplicates"; ///< The command string for removing duplicate tracks
         const std::string m_play_pause = "play_pause";               ///< The command string for toggling between playing and pausing

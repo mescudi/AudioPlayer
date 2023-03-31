@@ -138,24 +138,75 @@ namespace AudioPlayer
 
     void PlayerExecutor::set_previous_track()
     {
-        // stop playing
-        // m_state_machine->updated(State{Stopped{}});
-        // set current track to next
-        std::string iv_string = "";
-        m_playlist.set_next_and_return(iv_string);
-        m_context.set_current_track_name(iv_string);
-        // m_state_machine->updated(State{Started{}});
+        LOG("DEV", "");
+        try
+        {
+            std::string iv_string = "";
+            m_playlist.set_previous_and_return(iv_string);
+            m_context.set_current_track_name(iv_string);
+        }
+        catch (const std::exception &iv_e)
+        {
+            std::string iv_string = std::string("Error : ") + iv_e.what() + std::string(",no new track played : ");
+            m_output.display_message(iv_string);
+        }
     }
     void PlayerExecutor::set_next_track()
     {
+        LOG("DEV", "");
+        try
+        {
+            std::string iv_string = "";
+            m_playlist.set_next_and_return(iv_string);
+            m_context.set_current_track_name(iv_string);
+        }
+        catch (const std::exception &iv_e)
+        {
+            std::string iv_string = std::string("Error : ") + iv_e.what() + std::string(",no new track played : ");
+            m_output.display_message(iv_string);
+        }
     }
     void PlayerExecutor::set_random_track()
     {
-        m_output.display_random();
+        LOG("DEV", "");
+        try
+        {
+            m_output.display_repeat();
+
+            std::string iv_string = "";
+            m_playlist.set_and_return_random_track(iv_string);
+            m_context.set_current_track_name(iv_string);
+        }
+        catch (const std::exception &iv_e)
+        {
+            std::string iv_string = std::string("Error : ") + iv_e.what() + std::string(",no new track played : ");
+            m_output.display_message(iv_string);
+        }
     }
     void PlayerExecutor::set_same_track()
     {
+        LOG("DEV", "");
         m_output.display_repeat();
+    }
+
+    void PlayerExecutor::add_all_system_tracks_to_playlist()
+    {
+        auto iv_capture_play_list_was_empty = m_playlist.is_empty();
+        std::string iv_display = "\nPlaylists Tracks :\n";
+        for (const auto iv_it : m_system_conf.getFileSystemMap())
+        {
+            m_playlist.add_track(iv_it.first);
+            iv_display += "\n [" + iv_it.first + "]";
+        }
+        // if the original playlist was empty and we try to insert a non empty one
+        if (iv_capture_play_list_was_empty && !m_system_conf.getFileSystemMap().empty())
+        {
+            std::string iv_current_track = m_system_conf.getFileSystemMap().begin()->first;
+            m_context.set_current_track_name(iv_current_track); // index is already 0
+            iv_display += "\nCurrent track of playlist is now " + iv_current_track;
+        }
+
+        m_output.display_message(iv_display);
     }
 
 }

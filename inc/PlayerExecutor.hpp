@@ -35,6 +35,10 @@ namespace AudioPlayer
         void add_track_to_playlist(const std::string &mv_string) override;
 
         /**
+         * @brief Adds a every audio file of the System Files to the playlist.
+         */
+        void add_all_system_tracks_to_playlist() override;
+        /**
          * @brief Removes a track from the playlist.
          *
          * @param track_id The id of the track to be removed.

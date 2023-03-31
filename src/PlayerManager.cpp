@@ -26,6 +26,12 @@ namespace AudioPlayer
         LOG("DEV", cmd->m_name + ", track : " + cmd->m_track_name);
         m_executor.add_track_to_playlist(cmd->m_track_name);
     }
+
+    void PlayerManager::handleCommand(std::shared_ptr<const AddAllTracksCommand> cmd)
+    {
+        LOG("DEV", "");
+        m_executor.add_all_system_tracks_to_playlist();
+    }
     void PlayerManager::handleCommand(std::shared_ptr<const RemoveTrackCommand> cmd) {}
     void PlayerManager::handleCommand(std::shared_ptr<const RemoveDuplicatesCommand> cmd)
     {

@@ -7,7 +7,7 @@ namespace AudioPlayer
 
     InputManager::InputManager(const IOutputWriter &mv_output_writer) : m_output_writer(mv_output_writer)
     {
-        m_help_string = "\n Help : \n - " + m_add_track + " \'track name\'\n - " + m_remove_track + " \'track index\'\n - " + m_remove_duplicates + "\n - " + m_play_pause + "\n - " + m_stop + "\n - " + m_next + "\n - " + m_previous + "\n - " + m_random + "\n - " + m_repeat + "\n - " + m_show_track + "\n - " + m_show_playlist + "\n - " + m_end;
+        m_help_string = "\n Help : \n - " + m_add_all_tracks + "\n -" + m_add_track + " \'track name\'\n - " + m_remove_track + " \'track index\'\n - " + m_remove_duplicates + "\n - " + m_play_pause + "\n - " + m_stop + "\n - " + m_next + "\n - " + m_previous + "\n - " + m_random + "\n - " + m_repeat + "\n - " + m_show_track + "\n - " + m_show_playlist + "\n - " + m_end;
         m_output_writer.display_message("Type : \"" + m_help + "\" to display again : " + m_help_string);
     }
     // Function to get user input and return a CommandVariant object
@@ -39,6 +39,11 @@ namespace AudioPlayer
             std::string iv_track_name;
             iss >> iv_track_name;
             return std::make_shared<AddTrackCommand>(iv_track_name);
+        }
+        else if (iv_command_str == m_add_all_tracks)
+        {
+            // If "add_all_track" command is entered, return a RemoveTrackCommand object
+            return std::make_shared<AddAllTracksCommand>();
         }
         else if (iv_command_str == m_remove_track)
         {

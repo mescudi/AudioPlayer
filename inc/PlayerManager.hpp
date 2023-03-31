@@ -54,6 +54,13 @@ namespace AudioPlayer
         void handleCommand(std::shared_ptr<const AddTrackCommand> cmd);
 
         /**
+         * @brief Handles the command of adding every tracks to the playlist.
+         *
+         * @param cmd The command to be handled.
+         */
+        void handleCommand(std::shared_ptr<const AddAllTracksCommand> cmd);
+
+        /**
          * @brief Handles the command of removing a track from the playlist.
          *
          * @param cmd The command to be handled.

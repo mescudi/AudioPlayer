@@ -42,7 +42,9 @@ namespace AudioPlayer
     public:                                      \
         const std::string m_name = #commandName; \
     };
-    DEFINE_COMMAND(EndCommand);              /*!< The command to end the AudioPlayer. */
+    DEFINE_COMMAND(EndCommand);          /*!< The command to end the AudioPlayer. */
+    DEFINE_COMMAND(AddAllTracksCommand); /*!< The command to end the AudioPlayer. */
+
     DEFINE_COMMAND(RemoveTrackCommand);      /*!< The command to remove a track from the playlist. */
     DEFINE_COMMAND(RemoveDuplicatesCommand); /**< The command to remove duplicate tracks from the playlist. */
 
@@ -63,6 +65,7 @@ namespace AudioPlayer
     using CommandVariant = std::variant<
         std::nullptr_t,
         std::shared_ptr<const AddTrackCommand>,
+        std::shared_ptr<const AddAllTracksCommand>,
         std::shared_ptr<const RemoveTrackCommand>,
         std::shared_ptr<const RemoveDuplicatesCommand>,
         std::shared_ptr<const PlayPauseCommand>,

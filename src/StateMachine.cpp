@@ -2,6 +2,7 @@
 #include "match.hpp"
 #include "PlayerExecutor.hpp"
 #include <variant>
+#include "Logger.hpp"
 namespace AudioPlayer
 {
 
@@ -16,7 +17,7 @@ namespace AudioPlayer
     void StateMachine::stop()
     {
         std::visit(
-            [this](auto &state)
+            [&](auto &state)
             {
                 using T = std::decay_t<decltype(state)>;
                 if constexpr (std::is_same_v<T, Started> || std::is_same_v<T, Paused>)
@@ -35,7 +36,7 @@ namespace AudioPlayer
     void StateMachine::start_pause()
     {
         std::visit(
-            [this](auto &state)
+            [&](auto &state)
             {
                 using T = std::decay_t<decltype(state)>;
                 if constexpr (std::is_same_v<T, Stopped>)
@@ -69,10 +70,13 @@ namespace AudioPlayer
                 if constexpr (std::is_same_v<T, RandomPlayingStrategy>) // if strategy was Random -> Normal
                 {
                     // return to normal
+                    LOG("DEV", "From Random to Normal strategy transition");
+
                     m_playing_strategy = NormalPlayingStrategy{};
                 } // if strategy was normal or Repeat -> Random
                 else if constexpr (std::is_same_v<T, NormalPlayingStrategy> || std::is_same_v<T, RepeatPlayingStrategy>)
                 {
+                    LOG("DEV", "To  Random strategy transition");
                     m_playing_strategy = RandomPlayingStrategy{};
                 }
             },
@@ -88,10 +92,13 @@ namespace AudioPlayer
                 if constexpr (std::is_same_v<T, RepeatPlayingStrategy>) // if strategy was Repeat -> Normal
                 {
                     // return to normal
+                    LOG("DEV", "From Repeat to Normal strategy transition");
                     m_playing_strategy = NormalPlayingStrategy{};
                 } // if strategy was normal or Random -> Repeat
                 else if constexpr (std::is_same_v<T, NormalPlayingStrategy> || std::is_same_v<T, RandomPlayingStrategy>)
                 {
+                    LOG("DEV", "To  Repeat strategy transition");
+
                     m_playing_strategy = RepeatPlayingStrategy{};
                 }
             },
@@ -99,26 +106,31 @@ namespace AudioPlayer
     }
 
     void StateMachine::next()
-    { // if not Stopped -> stop
+    { //[1] if not Stopped -> stop
+        LOG("DEV", "");
+
         std::visit(
-            [this](auto &state)
+            [&](auto &state)
             {
                 using T = std::decay_t<decltype(state)>;
                 if constexpr (!std::is_same_v<T, Stopped>)
 
                 {
+                    LOG("DEV", "State different from stop, transition to stop");
                     m_state = State{Stopped{}};
                     auto iv_state = std::get<Stopped>(m_state);
                     iv_state.exec_stop(m_executor);
                 }
             },
             m_state);
-        // access call the "next current strategy"  strategy
-        std::visit([this](auto &strategy) { // capture 'this' explicitly
-            strategy.next(this->m_executor);
-        },
+        //[2]  access call the "next current strategy"  strategy
+        LOG("DEV", "Execute adequate next strategy");
+        std::visit([&](auto &strategy)
+                   { strategy.next(m_executor); },
                    m_playing_strategy);
-        // start again
+        //[3] start again
+        LOG("DEV", "Start");
+
         start_pause();
     }
 
@@ -126,24 +138,27 @@ namespace AudioPlayer
     {
         // if not Stopped -> stop
         std::visit(
-            [this](auto &state)
+            [&](auto &state)
             {
                 using T = std::decay_t<decltype(state)>;
                 if constexpr (!std::is_same_v<T, Stopped>)
 
                 {
+                    LOG("DEV", "State different from stop, transition to stop");
                     m_state = State{Stopped{}};
                     auto iv_state = std::get<Stopped>(m_state);
                     iv_state.exec_stop(m_executor);
                 }
             },
             m_state);
-        // access call the "next current strategy"  strategy
-        std::visit([this](auto &strategy) { // capture 'this' explicitly
-            strategy.previous(this->m_executor);
-        },
+        //[2]  access call the "next current strategy"  strategy
+        LOG("DEV", "Execute adequate next strategy");
+        std::visit([&](auto &strategy)
+                   { strategy.previous(m_executor); },
                    m_playing_strategy);
         // start again
+        LOG("DEV", "Start");
+
         start_pause();
     }
 
