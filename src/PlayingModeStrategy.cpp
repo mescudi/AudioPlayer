@@ -23,11 +23,20 @@ namespace AudioPlayer
     {
         mv_executor.set_random_track(); // the strategy in normal mode when previous is called is to play the previous track
     }
+    void RandomPlayingStrategy::previous(IPlayerExecutor &mv_executor)
+    {
+        mv_executor.set_random_track(); // the strategy in normal mode when previous is called is to play the previous track
+    }
 
     RepeatPlayingStrategy::RepeatPlayingStrategy()
     {
     }
     void RepeatPlayingStrategy::next(IPlayerExecutor &mv_executor)
+    {
+        mv_executor.set_same_track(); // the strategy in normal mode when previous is called is to play the previous track
+    }
+
+    void RepeatPlayingStrategy::previous(IPlayerExecutor &mv_executor)
     {
         mv_executor.set_same_track(); // the strategy in normal mode when previous is called is to play the previous track
     }

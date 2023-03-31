@@ -11,8 +11,6 @@ namespace AudioPlayer
                                                                           m_state_machine(m_executor, m_context)
 
     {
-        std::cout << "on passe icid" << std::endl;
-
         displaySystemFiles();
     }
 
@@ -58,11 +56,26 @@ namespace AudioPlayer
     void PlayerManager::handleCommand(std::shared_ptr<const NextCommand> cmd)
     {
         // appeler le visitor correspondant
-        m_state_machine.next();
+        if (m_context.is_there_track_to_play())
+        {
+            m_state_machine.next();
+        }
+        else
+        {
+            m_output.display_message("No track in the playlist, before stopping add one with add_track \'name of your track\'");
+        }
     }
     void PlayerManager::handleCommand(std::shared_ptr<const PreviousCommand> cmd)
     {
-        m_state_machine.previous();
+        // appeler le visitor correspondant
+        if (m_context.is_there_track_to_play())
+        {
+            m_state_machine.previous();
+        }
+        else
+        {
+            m_output.display_message("No track in the playlist, before stopping add one with add_track \'name of your track\'");
+        }
     }
 
     void PlayerManager::handleCommand(std::shared_ptr<const RandomCommand> cmd)

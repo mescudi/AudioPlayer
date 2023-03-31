@@ -7,7 +7,6 @@ namespace AudioPlayer
           m_output_writer(mv_output_writer)
 
     {
-        std::cout << "On passe cela" << std::endl;
     }
 
     void Output::display_message(const std::string &mv_message) const
@@ -43,6 +42,11 @@ namespace AudioPlayer
     void Output::display_paused() const
     {
         display_message(m_player_context.get_current_track_name() + "Player Paused ");
+    }
+
+    void Output::display_resumed() const
+    {
+        display_message(m_player_context.get_current_track_name() + "Player Resumed ");
     }
 
     void Output::display_repeat() const

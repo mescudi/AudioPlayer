@@ -54,6 +54,7 @@ namespace AudioPlayer
          * @brief Displays a message that the audio player has resumed playback
          *
          */
+        virtual void display_resumed() const = 0;
 
         /**
          * @brief Displays a message that the audio player is repeating playback

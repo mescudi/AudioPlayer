@@ -8,7 +8,7 @@
 namespace AudioPlayer
 {
 
-    PlayList::PlayList()
+    PlayList::PlayList() : m_current_track_index(0)
     {
     }
     void PlayList::add_track(const std::string &mv_string)
@@ -25,13 +25,48 @@ namespace AudioPlayer
         return m_tracks.size();
     }
 
+    void PlayList::set_next_and_return(std::string &mv_string)
+    {
+        if (m_tracks.empty())
+        {
+            throw std::out_of_range("Empty vector.");
+        }
+        if (m_current_track_index == m_tracks.size() - 1) // if current is last go to begin of vector
+        {
+            m_current_track_index = 0;
+            mv_string = m_tracks.front(); // return first element
+        }
+        else
+        {
+            m_current_track_index++;
+            mv_string = m_tracks[m_current_track_index]; // else return next element
+        }
+    }
+    void PlayList::set_previous_and_return(std::string &mv_string)
+    {
+        if (m_tracks.empty())
+        {
+            throw std::out_of_range("Empty vector.");
+        }
+        if (m_current_track_index == 0) // if current is first go to last
+        {
+            m_current_track_index = m_tracks.size() - 1;
+            mv_string = m_tracks.back(); // return first element
+        }
+        else
+        {
+            m_current_track_index--;
+            mv_string = m_tracks[m_current_track_index]; // else return decrement
+        }
+    }
+
     void PlayList::remove_track(uint32_t mv_index)
     {
 
         if (mv_index < 0 || mv_index >= m_tracks.size()) // check if indev is not invalid
         {
             // Invalid Index
-            return;
+            throw std::out_of_range("Invalid index.");
         }
         m_tracks.erase(m_tracks.begin() + mv_index);
     }
@@ -51,16 +86,24 @@ namespace AudioPlayer
         }
         m_tracks = std::move(iv_result); // Rempl
     }
-    void PlayList::pick_random_track(std::string &mv_track_name) const
+    void PlayList::set_and_return_random_track(std::string &mv_track_name)
     {
-        std::vector<std::string> out;
-        std::sample(
-            m_tracks.begin(),
-            m_tracks.end(),
-            std::back_inserter(out),
-            1,
-            std::mt19937{std::random_device{}()}); // get 1 element random between the first and last element of vector return in out vector
-        mv_track_name = out.front();
+        // Vérifie que le vecteur n'est pas vide
+        if (m_tracks.empty())
+        {
+            throw std::out_of_range("Le vecteur est vide.");
+        }
+
+        // Initialise le générateur de nombres aléatoires
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dis(0, m_tracks.size() - 1);
+
+        // Génère un index aléatoire dans la plage des indices valides du vecteur
+        m_current_track_index = dis(gen);
+
+        // Retourne la valeur correspondante à l'index aléatoire
+        mv_track_name = m_tracks[m_current_track_index];
     }
 
     void PlayList::get_index_of_track(const std::string &mv_track_name, uint32_t &index) const
@@ -70,6 +113,11 @@ namespace AudioPlayer
     const std::vector<std::string> &PlayList::get_playlist() const
     {
         return m_tracks;
+    }
+
+    uint32_t PlayList::get_current_track_index() const
+    {
+        return m_current_track_index;
     }
 
 }

@@ -3,9 +3,8 @@
 namespace AudioPlayer
 {
 
-    PlayerContext::PlayerContext() : m_current_track_name(""), m_current_track_index(0) // current track initialized to "" before a  track is added
+    PlayerContext::PlayerContext() : m_current_track_name("") // current track initialized to "" before a  track is added
     {
-        std::cout << "on passe iciPlayerContext" << std::endl;
     }
     // PlayingMode PlayerContext::get_playing_mode() const
     // {
@@ -23,15 +22,6 @@ namespace AudioPlayer
     void PlayerContext::set_current_track_name(const std::string &mv_current_track_name)
     {
         m_current_track_name = mv_current_track_name;
-    }
-
-    uint32_t PlayerContext::get_current_track_index() const
-    {
-        return m_current_track_index;
-    }
-    void PlayerContext::set_current_track_index(uint32_t mv_current_track_index)
-    {
-        m_current_track_index = mv_current_track_index;
     }
 
     bool PlayerContext::is_there_track_to_play()

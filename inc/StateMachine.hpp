@@ -44,6 +44,11 @@ namespace AudioPlayer
         {
             mv_executor.start();
         }
+
+        void exec_resume(IPlayerExecutor &mv_executor)
+        {
+            mv_executor.resume();
+        }
     };
 
     /**
@@ -127,7 +132,7 @@ namespace AudioPlayer
     private:
         State m_state; /**< The current state of the state machine */
 
-        // PlayingModeStrategy m_playing_strategy; /**< The current playing mode of the state machine */
+        PlayingModeStrategy m_playing_strategy; /**< The current playing mode of the state machine */
 
         IPlayerExecutor &m_executor; /**< The player executor object */
         IPlayerContext &m_context;   /**< The player context object */

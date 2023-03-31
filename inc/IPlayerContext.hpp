@@ -21,18 +21,6 @@ public:
     virtual void set_current_track_name(const std::string &m_current_track_name) = 0;
 
     /**
-     * @brief Gets the index of the current track being played.
-     * @return The index of the current track being played.
-     */
-    virtual uint32_t get_current_track_index() const = 0;
-
-    /**
-     * @brief Sets the index of the current track being played.
-     * @param m_current_track_index The index of the current track being played.
-     */
-    virtual void set_current_track_index(uint32_t m_current_track_index) = 0;
-
-    /**
      * @brief Determines whether there is a track to play.
      * @return True if there is a track to play, false otherwise.
      */

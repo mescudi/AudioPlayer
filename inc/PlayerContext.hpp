@@ -38,27 +38,13 @@ namespace AudioPlayer
         void set_current_track_name(const std::string &mv_current_track_name) override;
 
         /**
-         * @brief Returns the index of the current audio track.
-         * @return The index of the current audio track.
-         */
-        uint32_t get_current_track_index() const override;
-
-        /**
-         * @brief Sets the index of the current audio track.
-         * @param m_current_track_index The index of the current audio track.
-         */
-        void set_current_track_index(uint32_t m_current_track_index) override;
-
-        /**
          * @brief Determines whether there is a track to play or not.
          * @return True if there is a track to play, false otherwise.
          */
         bool is_there_track_to_play() override;
 
     private:
-        // PlayingMode m_playing_mode;
         std::string m_current_track_name; ///< The name of the current audio track.
-        uint32_t m_current_track_index;   ///< The index of the current audio track.
     };
 
 }

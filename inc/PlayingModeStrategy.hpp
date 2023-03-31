@@ -2,21 +2,12 @@
 #define PLAYING_MODE_STRATEGY_HPP
 #include "IPlayerExecutor.hpp"
 #include <memory>
+/**
+ * @brief This header defines all the PlayingModeStrategy and what
+ *  happens when previous and next are called
+ */
 namespace AudioPlayer
 {
-    // class PlayingModeStrategyAbstract
-    // {
-
-    // public:
-    //     virtual ~PlayingModeStrategyAbstract(){};
-    //     PlayingModeStrategyAbstract(IPlayerExecutor);
-
-    //     virtual void previous() = 0;
-    //     virtual void next() = 0;
-
-    // protected:
-    //     PlayerExecutor m_executor;
-    // };
 
     /**
      * @brief Implements the Normal playing strategy.
@@ -54,6 +45,11 @@ namespace AudioPlayer
          * @brief Switches to a random track in the playlist.
          */
         void next(IPlayerExecutor &);
+
+        /**
+         * @brief Switches to a random track in the playlist.
+         */
+        void previous(IPlayerExecutor &);
     };
 
     /**
@@ -64,7 +60,15 @@ namespace AudioPlayer
     public:
         RepeatPlayingStrategy();
 
+        /**
+         * @brief Repeat the same track in the playlist.
+         */
         void next(IPlayerExecutor &);
+
+        /**
+         * @brief Repeat the same track in the playlist.
+         */
+        void previous(IPlayerExecutor &);
     };
 }
 #endif

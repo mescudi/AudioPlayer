@@ -26,7 +26,7 @@ namespace AudioPlayer
     }
     void PlayerExecutor::resume()
     {
-        // m_output.display_resumed();
+        m_output.display_resumed();
     }
 
     // Add track to playlist method
@@ -85,7 +85,7 @@ namespace AudioPlayer
         else
         {
             auto iv_track_name = m_context.get_current_track_name();
-            auto iv_track_number = m_context.get_current_track_index() + 1; // first index is 1 for a end user
+            auto iv_track_number = m_playlist.get_current_track_index() + 1; // first index is 1 for a end user
 
             uint32_t iv_size_playlist = m_playlist.get_number_of_elements();
             // LOG("DEV", std::to_string(iv_size_playlist));
@@ -138,6 +138,13 @@ namespace AudioPlayer
 
     void PlayerExecutor::set_previous_track()
     {
+        // stop playing
+        // m_state_machine->updated(State{Stopped{}});
+        // set current track to next
+        std::string iv_string = "";
+        m_playlist.set_next_and_return(iv_string);
+        m_context.set_current_track_name(iv_string);
+        // m_state_machine->updated(State{Started{}});
     }
     void PlayerExecutor::set_next_track()
     {

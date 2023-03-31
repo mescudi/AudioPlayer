@@ -7,6 +7,7 @@
 #include "PlayList.hpp"
 #include "IOutput.hpp"
 #include "ConfigSystemFiles.hpp"
+#include "StateMachine.hpp"
 
 namespace AudioPlayer
 {
@@ -96,9 +97,9 @@ namespace AudioPlayer
         void set_same_track() override;
 
     private:
-        IPlayerContext &m_context;                            ///< An instance of the IPlayerContext interface.
-        const SystemFiles::IConfigSystemFiles &m_system_conf; ///< An instance of the IConfigSystemFiles interface.
-        IOutput &m_output;                                    ///< An instance of the IOutput interface.
+        IPlayerContext &m_context;                            ///< An reference of the IPlayerContext interface.
+        const SystemFiles::IConfigSystemFiles &m_system_conf; ///< An reference of the IConfigSystemFiles interface.
+        IOutput &m_output;                                    ///< An reference of the IOutput interface.
         PlayList m_playlist;                                  ///< An instance of the PlayList class.
     };
 

@@ -71,8 +71,19 @@ namespace AudioPlayer
          */
         uint32_t get_number_of_elements() const;
 
+        void set_next_and_return(std::string &);
+        void set_previous_and_return(std::string &);
+        void set_and_return_random_track(std::string &);
+
+        /**
+         * @brief Returns the index of the current audio track.
+         * @return The index of the current audio track.
+         */
+        uint32_t get_current_track_index() const;
+
     private:
         std::vector<std::string> m_tracks; ///< The vector of tracks in the playlist.
+        uint32_t m_current_track_index;    ///< The index of the current audio track.
     };
 
 }

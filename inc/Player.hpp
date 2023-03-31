@@ -19,10 +19,7 @@ namespace AudioPlayer
             OutputWriter iv_output_writer;
             iv_output_writer.display_message(" Welcome on Player");
             InputManager input_manager(iv_output_writer);
-            std::cout << "on passe ici" << std::endl;
-
             PlayerManager player_manager(iv_output_writer);
-            std::cout << "on passe ici" << std::endl;
 
             CommandVariant iv_command = nullptr;
 

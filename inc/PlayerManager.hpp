@@ -12,7 +12,7 @@
 
 namespace AudioPlayer
 {
-
+    class StateMachine;
     /**
      * @brief The manager of the audio player.
      */

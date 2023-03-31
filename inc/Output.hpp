@@ -56,10 +56,17 @@ namespace AudioPlayer
         void display_paused() const override;
 
         /**
+         * @brief Displays a message that the audio player has resumed playback
+         *
+         */
+        void display_resumed() const override;
+
+        /**
          * @brief Displays a message that the audio player is repeating playback
          *
          */
-        void display_repeat() const override;
+        void
+        display_repeat() const override;
 
         /**
          * @brief Displays a message that the audio player is randomazing the next and previous track
