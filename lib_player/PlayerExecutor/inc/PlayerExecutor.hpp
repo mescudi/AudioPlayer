@@ -41,9 +41,9 @@ namespace AudioPlayer
         /**
          * @brief Removes a track from the playlist.
          *
-         * @param track_id The id of the track to be removed.
+         * @param track_id The number of the track to be removed.
          */
-        void remove_track(uint32_t track_id) override;
+        void remove_track(uint32_t number) override;
 
         /**
          * @brief Removes duplicate tracks from the playlist.

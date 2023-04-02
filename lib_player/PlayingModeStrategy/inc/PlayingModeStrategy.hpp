@@ -37,7 +37,6 @@ namespace AudioPlayer
         /**
          * @brief Constructor of Random Playing Strategy object.
          *
-
          */
         RandomPlayingStrategy();
 

@@ -162,4 +162,13 @@ namespace AudioPlayer
         start_pause();
     }
 
+    void remove()
+    {
+        // if (track urrent = track index)
+        // {
+        //     stop();
+        // }
+        // remove_index
+        // start();
+    }
 }

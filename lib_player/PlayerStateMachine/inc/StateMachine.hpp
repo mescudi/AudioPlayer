@@ -129,6 +129,11 @@ namespace AudioPlayer
          */
         void previous();
 
+        /**
+         * @brief Skips to the previous track
+         */
+        void remove();
+
     private:
         State m_state; /**< The current state of the state machine */
 

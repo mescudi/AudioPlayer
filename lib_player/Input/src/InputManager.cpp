@@ -47,8 +47,20 @@ namespace AudioPlayer
         }
         else if (iv_command_str == m_remove_track)
         {
-            // If "remove track" command is entered, return a RemoveTrackCommand object
-            return std::make_shared<RemoveTrackCommand>();
+            // If "remove track" command is entered, get the track index from input and return a RemoveTrackCommand object
+            std::string iv_track_index_str;
+            iss >> iv_track_index_str;
+
+            // Check if the input string contains only numeric characters
+            if (iv_track_index_str.find_first_not_of("0123456789") != std::string::npos)
+            {
+                m_output_writer.display_message("Invalid input: track index must be a positive integer");
+            }
+            else
+            {
+                uint32_t iv_track_index = std::stoi(iv_track_index_str);
+                return std::make_shared<RemoveTrackCommand>(iv_track_index);
+            }
         }
         else if (iv_command_str == m_remove_duplicates)
         {

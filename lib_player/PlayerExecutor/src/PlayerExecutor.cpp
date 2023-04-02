@@ -66,14 +66,25 @@ namespace AudioPlayer
             m_output.display_message("Track name " + mv_string + " does not correspond to any file system track");
         }
     }
-    void PlayerExecutor::remove_track(uint32_t mv_index)
+    void PlayerExecutor::remove_track(uint32_t mv_number)
     {
-        m_playlist.remove_track(mv_index);
+        try
+        {
+            std::string iv_track_name_to_remove = "";
+            m_playlist.remove_track(mv_number - 1, iv_track_name_to_remove);
+            m_output.display_message("Track  " + std::to_string(mv_number) + " : " + iv_track_name_to_remove + " removed");
+        }
+        catch (...)
+        {
+            m_output.display_message("No track numbered " + std::to_string(mv_number));
+        }
     }
     void PlayerExecutor::remove_duplicates()
     {
 
         m_playlist.remove_duplicates();
+        m_output.display_message("duplicates Removed");
+        show_playlist();
     }
 
     void PlayerExecutor::show_track()
@@ -192,7 +203,7 @@ namespace AudioPlayer
     void PlayerExecutor::add_all_system_tracks_to_playlist()
     {
         auto iv_capture_play_list_was_empty = m_playlist.is_empty();
-        std::string iv_display = "\nPlaylists Tracks :\n";
+        std::string iv_display = "\nTracks added :\n";
         for (const auto iv_it : m_system_conf.getFileSystemMap())
         {
             m_playlist.add_track(iv_it.first);

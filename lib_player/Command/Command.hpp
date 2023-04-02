@@ -18,6 +18,23 @@ namespace AudioPlayer
 {
     /*
 
+    *@brief The RemoveTrackCommand class represents a command to add a track to the playlist.
+    */
+    class RemoveTrackCommand
+    {
+    public:
+        /*
+
+        @brief Construct a newRemoveTrackCommand object.
+        @param mv_track_index The index of the track to remove from the playlist.
+        */
+        RemoveTrackCommand(uint32_t mv_track_number) : m_track_number(mv_track_number) {}
+        const std::string m_name = "RemoveTrackCommand"; /*!< The name of the command. */
+        uint32_t m_track_number;                         /*!< The name of the track to add to the playlist. */
+    };
+
+    /*
+
     *@brief The AddTrackCommand class represents a command to add a track to the playlist.
     */
     class AddTrackCommand
@@ -32,7 +49,6 @@ namespace AudioPlayer
         const std::string m_name = "AddTrackCommand"; /*!< The name of the command. */
         std::string m_track_name;                     /*!< The name of the track to add to the playlist. */
     };
-
 /**
  *@brief Macro to define a command class with its name as the macro argument.
  */
@@ -42,10 +58,8 @@ namespace AudioPlayer
     public:                                      \
         const std::string m_name = #commandName; \
     };
-    DEFINE_COMMAND(EndCommand);          /*!< The command to end the AudioPlayer. */
-    DEFINE_COMMAND(AddAllTracksCommand); /*!< The command to end the AudioPlayer. */
-
-    DEFINE_COMMAND(RemoveTrackCommand);      /*!< The command to remove a track from the playlist. */
+    DEFINE_COMMAND(EndCommand);              /*!< The command to end the AudioPlayer. */
+    DEFINE_COMMAND(AddAllTracksCommand);     /*!< The command to end the AudioPlayer. */
     DEFINE_COMMAND(RemoveDuplicatesCommand); /**< The command to remove duplicate tracks from the playlist. */
 
     DEFINE_COMMAND(PlayPauseCommand); /*!< The command to play or pause the current track. */

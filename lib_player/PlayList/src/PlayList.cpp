@@ -60,15 +60,34 @@ namespace AudioPlayer
         }
     }
 
-    void PlayList::remove_track(uint32_t mv_index)
+    void PlayList::remove_track(uint32_t mv_index, std ::string &mv_track_name)
     {
 
-        if (mv_index < 0 || mv_index >= m_tracks.size()) // check if indev is not invalid
+        if (mv_index < 0 || mv_index >= m_tracks.size()) // check if index is invalid
         {
             // Invalid Index
             throw std::out_of_range("Invalid index.");
         }
-        m_tracks.erase(m_tracks.begin() + mv_index);
+
+        mv_track_name = m_tracks.at(mv_index);                   // get the name of the track at the given index
+        auto iter = m_tracks.erase(m_tracks.begin() + mv_index); // remove the track from the vector and get the updated iterator
+        // If the removed track is before the current track, decrement the current index
+        if (mv_index < m_current_track_index)
+        {
+            m_current_track_index--;
+        }
+        // If the current track was removed, update the current index to the next track if possible
+        else if (mv_index == m_current_track_index)
+        {
+            if (iter != m_tracks.end()) // check if there is a next track
+            {
+                m_current_track_index = std::distance(m_tracks.begin(), iter);
+            }
+            else // otherwise, set the current index to the previous track
+            {
+                m_current_track_index--;
+            }
+        }
     }
 
     void PlayList::remove_duplicates()
@@ -119,5 +138,4 @@ namespace AudioPlayer
     {
         return m_current_track_index;
     }
-
 }

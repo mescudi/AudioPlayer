@@ -19,8 +19,9 @@ namespace AudioPlayer
         /**
          * @brief Removes a track from the playlist.
          * @param mv_index The index of the track to remove.
+         * @param mv_track_name name of the track removed.
          */
-        void remove_track(uint32_t mv_index);
+        void remove_track(uint32_t mv_index, std::string &mv_track_name);
 
         /**
          * @brief Removes duplicate tracks from the playlist.
