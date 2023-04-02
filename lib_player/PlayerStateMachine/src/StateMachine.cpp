@@ -6,9 +6,8 @@
 namespace AudioPlayer
 {
 
-    StateMachine::StateMachine(IPlayerExecutor &executor, IPlayerContext &mv_context)
+    StateMachine::StateMachine(IPlayerExecutor &executor)
         : m_executor(executor),
-          m_context(mv_context),
           m_state(State{Stopped{}}),
           m_playing_strategy(std::in_place_index<0>, NormalPlayingStrategy{}) // initialize with type 1 which is NormalPlayingStrategy
     {
@@ -162,13 +161,39 @@ namespace AudioPlayer
         start_pause();
     }
 
-    void remove()
+    void StateMachine::remove_track(uint32_t mv_track_number)
     {
-        // if (track urrent = track index)
-        // {
-        //     stop();
-        // }
-        // remove_index
-        // start();
+        LOG("DEV", "");
+
+        if (m_executor.get_current_track_number().has_value()) // if playlist has tracks
+        {
+            LOG("DEV", "track number has value");
+
+            if (mv_track_number == m_executor.get_current_track_number().value())
+            { // if the current track is being remove,
+                LOG("DEV", "Remove same track as current");
+
+                std::visit(
+                    [&](auto &state)
+                    {
+                        using T = std::decay_t<decltype(state)>;
+                        if constexpr (std::is_same_v<T, Started>)
+                        { // stop the playing, remove the track and resume the playing else if it was started
+                            stop();
+                            m_executor.remove_track(mv_track_number);
+                            start_pause();
+                        }
+                        if constexpr (!std::is_same_v<T, Started>)
+                        {
+                            m_executor.remove_track(mv_track_number); // else only remove the track
+                        }
+                    },
+                    m_state);
+            }
+            else
+            {
+                m_executor.remove_track(mv_track_number); // if the current track is not remove just remove the track of index mv_track_number
+            }
+        }
     }
 }
