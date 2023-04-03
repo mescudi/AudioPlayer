@@ -6,12 +6,12 @@ namespace AudioPlayer
 {
     PlayerManager::PlayerManager(const IOutputWriter &mv_output_writer) : m_system_conf(),
                                                                           m_playlist(),
-                                                                          m_output(m_playlist, mv_output_writer),
+                                                                          m_output(m_playlist, mv_output_writer, m_system_conf),
                                                                           m_executor(m_playlist, m_system_conf, m_output),
                                                                           m_state_machine(m_executor)
 
     {
-        displaySystemFiles();
+        m_output.displaySystemFiles();
     }
 
     void PlayerManager::process_command(CommandVariant mv_cmd)
@@ -21,18 +21,18 @@ namespace AudioPlayer
                    mv_cmd);
     }
 
-    void PlayerManager::handleCommand(std::shared_ptr<const AddTrackCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const add_track> cmd)
     {
-        LOG("DEV", cmd->m_name + ", track : " + cmd->m_track_name);
+        LOG("DEV", cmd->name() + ", track : " + cmd->m_track_name);
         m_executor.add_track_to_playlist(cmd->m_track_name);
     }
 
-    void PlayerManager::handleCommand(std::shared_ptr<const AddAllTracksCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const add_all_tracks> cmd)
     {
         LOG("DEV", "");
         m_executor.add_all_system_tracks_to_playlist();
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const RemoveTrackCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const remove_track> cmd)
     {
         LOG("DEV", "");
         if (m_playlist.is_there_track_to_play())
@@ -44,7 +44,7 @@ namespace AudioPlayer
             m_output.display_message("No track in the playlist, before removing add one with add_track \'name of your track\'");
         }
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const RemoveDuplicatesCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const remove_duplicates> cmd)
     {
         LOG("DEV", "");
         if (m_playlist.is_there_track_to_play())
@@ -56,7 +56,7 @@ namespace AudioPlayer
             m_output.display_message("No track in the playlist, before removing add one with add_track \'name of your track\'");
         }
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const PlayPauseCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const play_pause> cmd)
     {
         if (m_playlist.is_there_track_to_play())
         {
@@ -67,7 +67,7 @@ namespace AudioPlayer
             m_output.display_message("No track in the playlist, add one before with add_track \'name of your track\'");
         }
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const StopCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const stop> cmd)
     {
         if (m_playlist.is_there_track_to_play())
         {
@@ -78,7 +78,7 @@ namespace AudioPlayer
             m_output.display_message("No track in the playlist, before stopping add one with add_track \'name of your track\'");
         }
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const NextCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const next> cmd)
     {
         // appeler le visitor correspondant
         if (m_playlist.is_there_track_to_play())
@@ -90,7 +90,7 @@ namespace AudioPlayer
             m_output.display_message("No track in the playlist, before stopping add one with add_track \'name of your track\'");
         }
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const PreviousCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const previous> cmd)
     {
         // appeler le visitor correspondant
         if (m_playlist.is_there_track_to_play())
@@ -103,27 +103,27 @@ namespace AudioPlayer
         }
     }
 
-    void PlayerManager::handleCommand(std::shared_ptr<const RandomCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const random> cmd)
     {
         m_state_machine.set_random();
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const RepeatCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const repeat> cmd)
     {
-        LOG("DEV", cmd->m_name);
+        LOG("DEV", cmd->name());
         m_state_machine.set_repeat();
     }
 
-    void PlayerManager::handleCommand(std::shared_ptr<const ShowTrackCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const show_track> cmd)
     {
 
         m_executor.show_track();
     }
-    void PlayerManager::handleCommand(std::shared_ptr<const ShowPlaylistCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const show_playlist> cmd)
     {
         m_executor.show_playlist();
     }
     void PlayerManager::handleCommand(std::nullptr_t) {} // useless and ugly TODO modify visit so that all commands can be not implemented
-    void PlayerManager::handleCommand(std::shared_ptr<const EndCommand> cmd)
+    void PlayerManager::handleCommand(std::shared_ptr<const end> cmd)
     {
         m_running = false;
     }
@@ -131,15 +131,6 @@ namespace AudioPlayer
     bool PlayerManager::is_running()
     {
         return m_running;
-    }
-    void PlayerManager::displaySystemFiles() // deplacer
-    {
-        std::string iv_display = "\nSystem Tracks available to add :\n";
-        for (auto iv_it : m_system_conf.getFileSystemMap())
-        {
-            iv_display += "\n [" + iv_it.first + "]\n";
-        }
-        m_output.display_message(iv_display);
     }
 
 }

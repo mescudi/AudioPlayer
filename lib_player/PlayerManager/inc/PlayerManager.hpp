@@ -50,77 +50,77 @@ namespace AudioPlayer
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const AddTrackCommand> cmd);
+        void handleCommand(std::shared_ptr<const add_track> cmd);
 
         /**
          * @brief Handles the command of adding every tracks to the playlist.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const AddAllTracksCommand> cmd);
+        void handleCommand(std::shared_ptr<const add_all_tracks> cmd);
 
         /**
          * @brief Handles the command of removing a track from the playlist.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const RemoveTrackCommand> cmd);
+        void handleCommand(std::shared_ptr<const remove_track> cmd);
 
         /**
          * @brief Handles the command of removing duplicate tracks from the playlist.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const RemoveDuplicatesCommand> cmd);
+        void handleCommand(std::shared_ptr<const remove_duplicates> cmd);
 
         /**
          * @brief Handles the command of playing or pausing the player.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const PlayPauseCommand> cmd);
+        void handleCommand(std::shared_ptr<const play_pause> cmd);
 
         /**
          * @brief Handles the command of stopping the player.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const StopCommand> cmd);
+        void handleCommand(std::shared_ptr<const stop> cmd);
 
         /**
          * @brief Handles the command of playing the next track in the playlist.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const NextCommand> cmd);
+        void handleCommand(std::shared_ptr<const next> cmd);
 
         /**
          * @brief Handles the command of playing the previous track in the playlist.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const PreviousCommand> cmd);
+        void handleCommand(std::shared_ptr<const previous> cmd);
 
         /**
          * @brief Handles the command of playing a random track from the playlist.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const RandomCommand> cmd);
+        void handleCommand(std::shared_ptr<const random> cmd);
 
         /**
          * @brief Handles the command of playing the same track again.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const RepeatCommand> cmd);
+        void handleCommand(std::shared_ptr<const repeat> cmd);
 
         /**
          * @brief Handles the command of showing information about the current track.
          *
          * @param cmd The command to be handled.
          */
-        void handleCommand(std::shared_ptr<const ShowTrackCommand> cmd);
+        void handleCommand(std::shared_ptr<const show_track> cmd);
 
         /**
          * @brief Handles the ShowPlaylistCommand
@@ -129,7 +129,7 @@ namespace AudioPlayer
          *
          * @param cmd The shared pointer to the constant ShowPlaylistCommand to be handled.
          */
-        void handleCommand(std::shared_ptr<const ShowPlaylistCommand> cmd);
+        void handleCommand(std::shared_ptr<const show_playlist> cmd);
 
         /**
          * @brief Handles the EndCommand
@@ -138,7 +138,7 @@ namespace AudioPlayer
          *
          * @param cmd The shared pointer to the constant EndCommand to be handled.
          */
-        void handleCommand(std::shared_ptr<const EndCommand> cmd);
+        void handleCommand(std::shared_ptr<const end> cmd);
 
         /**
          * @brief Handles the nullptr_t command

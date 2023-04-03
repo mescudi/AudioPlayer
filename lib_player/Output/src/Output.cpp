@@ -2,10 +2,10 @@
 namespace AudioPlayer
 {
 
-    Output::Output(const PlayList &mv_playlist, const IOutputWriter &mv_output_writer)
+    Output::Output(const PlayList &mv_playlist, const IOutputWriter &mv_output_writer, const SystemFiles::IConfigSystemFiles &mv_system_conf)
         : m_playlist(mv_playlist),
-          m_output_writer(mv_output_writer)
-
+          m_output_writer(mv_output_writer),
+          m_system_conf(mv_system_conf)
     {
     }
 
@@ -68,5 +68,15 @@ namespace AudioPlayer
     void Output::display_random() const
     {
         display_message(" Random Mode Next and Previous tracks are the random");
+    }
+
+    void Output::displaySystemFiles() const // deplacer
+    {
+        std::string iv_display = "\nSystem Tracks available to add :\n";
+        for (auto iv_it : m_system_conf.getFileSystemMap())
+        {
+            iv_display += "\n [" + iv_it.first + "]\n";
+        }
+        display_message(iv_display);
     }
 }
