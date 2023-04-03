@@ -50,11 +50,10 @@ namespace AudioPlayer
             // If "remove track" command is entered, get the track index from input and return a RemoveTrackCommand object
             std::string iv_track_index_str;
             iss >> iv_track_index_str;
-
             // Check if the input string contains only numeric characters
-            if (iv_track_index_str.find_first_not_of("0123456789") != std::string::npos)
+            if (iv_track_index_str == "" || iv_track_index_str.find_first_not_of("0123456789") != std::string::npos)
             {
-                m_output_writer.display_message("Invalid input: track index must be a positive integer");
+                m_output_writer.display_message("Invalid input: track number must be a positive integer");
             }
             else
             {

@@ -64,7 +64,16 @@ namespace AudioPlayer
         {
             std::string iv_track_name_to_remove = "";
             m_playlist.remove_track(mv_number - 1, iv_track_name_to_remove);
-            m_output.display_message("Track  " + std::to_string(mv_number) + " : " + iv_track_name_to_remove + " removed");
+            std::string iv_ouput_str = "Track  " + std::to_string(mv_number) + " : " + iv_track_name_to_remove + " removed";
+            if (m_playlist.is_empty())
+            {
+                iv_ouput_str += ", no current track";
+            }
+            else
+            {
+                iv_ouput_str += ", current track is now " + m_playlist.get_current_track_name();
+            }
+            m_output.display_message(iv_ouput_str);
         }
         catch (const std::out_of_range iv_e)
         {
