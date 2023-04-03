@@ -6,6 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 include(CTest)
 enable_testing()
 
+## Enable logger to be compiled
+option(ENABLE_LOGGER "Enable logger" OFF)
+
+if (ENABLE_LOGGER)
+  add_definitions(-DENABLE_LOGGER)
+endif()
+
 add_subdirectory(common)
 add_subdirectory(lib_player)
 
