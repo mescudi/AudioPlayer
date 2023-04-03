@@ -1,7 +1,6 @@
 #ifndef PLAYER_MANAGER_HPP // include guard
 #define PLAYER_MANAGER_HPP
 
-#include "PlayerContext.hpp"
 #include "IPlayerManager.hpp"
 
 #include "PlayList.hpp"
@@ -158,9 +157,10 @@ namespace AudioPlayer
          */
         void displaySystemFiles();
 
-        StateMachine m_state_machine;                 ///< The state machine of the audio player.
-        PlayerContext m_context;                      ///< The context of the audio player.
-        PlayerExecutor m_executor;                    ///< The executor of the audio player.
+        StateMachine m_state_machine; ///< The state machine of the audio player.
+        PlayerExecutor m_executor;    ///< The executor of the audio player.
+        PlayList m_playlist;          ///< The class managing the object accessing
+
         Output m_output;                              ///< The output of the audio player.
         SystemFiles::ConfigSystemFiles m_system_conf; ///< The system configuration files of the audio player.
         bool m_running = true;                        ///< A flag indicating whether the audio player is running.

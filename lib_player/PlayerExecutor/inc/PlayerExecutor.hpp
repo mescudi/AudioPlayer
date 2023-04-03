@@ -2,7 +2,7 @@
 #define PLAYER_EXECUTOR_HPP
 
 #include "IPlayerExecutor.hpp"
-#include "IPlayerContext.hpp"
+#include "PlayList.hpp"
 #include "IPlayerManager.hpp"
 #include "PlayList.hpp"
 #include "IOutput.hpp"
@@ -25,7 +25,7 @@ namespace AudioPlayer
          * @param system_conf An instance of the IConfigSystemFiles interface.
          * @param output An instance of the IOutput interface.
          */
-        PlayerExecutor(IPlayerContext &context, const SystemFiles::IConfigSystemFiles &system_conf, IOutput &output);
+        PlayerExecutor(PlayList &mv_playlist, const SystemFiles::IConfigSystemFiles &system_conf, IOutput &output);
 
         /**
          * @brief Adds a track to the playlist.
@@ -100,11 +100,12 @@ namespace AudioPlayer
          */
         void set_same_track() override;
 
+        std::optional<uint32_t> get_current_track_number() const override;
+
     private:
-        IPlayerContext &m_context;                            ///< An reference of the IPlayerContext interface.
         const SystemFiles::IConfigSystemFiles &m_system_conf; ///< An reference of the IConfigSystemFiles interface.
         IOutput &m_output;                                    ///< An reference of the IOutput interface.
-        PlayList m_playlist;                                  ///< An instance of the PlayList class.
+        PlayList &m_playlist;                                 ///< An instance of the PlayList class.
     };
 
 }

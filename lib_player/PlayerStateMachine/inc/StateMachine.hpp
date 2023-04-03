@@ -2,7 +2,6 @@
 #define STATE_MACHINE_HPP
 #include <variant>
 #include "IPlayerExecutor.hpp"
-#include "IPlayerContext.hpp"
 #include "PlayingModeStrategy.hpp"
 
 namespace AudioPlayer
@@ -97,7 +96,7 @@ namespace AudioPlayer
          * @param mv_player_executor The player executor object
          * @param mv_context The player context object
          */
-        StateMachine(IPlayerExecutor &mv_player_executor, IPlayerContext &mv_context);
+        StateMachine(IPlayerExecutor &mv_player_executor);
 
         /**
          * @brief Stops the player and transitions to the Stopped state
@@ -130,9 +129,10 @@ namespace AudioPlayer
         void previous();
 
         /**
-         * @brief Skips to the previous track
+         * @brief Remove the track from the playlist
+         * @param the number of the track
          */
-        void remove();
+        void remove_track(uint32_t);
 
     private:
         State m_state; /**< The current state of the state machine */
@@ -140,7 +140,6 @@ namespace AudioPlayer
         PlayingModeStrategy m_playing_strategy; /**< The current playing mode of the state machine */
 
         IPlayerExecutor &m_executor; /**< The player executor object */
-        IPlayerContext &m_context;   /**< The player context object */
     };
 
 }

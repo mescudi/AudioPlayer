@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <iostream>
+#include <optional>
+#include "Track.hpp"
 
 namespace AudioPlayer
 {
@@ -48,17 +50,10 @@ namespace AudioPlayer
         void pick_random_track(std::string &mv_track_name) const;
 
         /**
-         * @brief Gets the index of a track in the playlist.
-         * @param mv_track_name The name of the track to get the index of.
-         * @param index A reference to a uint32_t that will contain the index of the track.
-         */
-        void get_index_of_track(const std::string &mv_track_name, uint32_t &index) const;
-
-        /**
          * @brief Gets a const reference to the vector of tracks in the playlist.
          * @return A const reference to the vector of tracks in the playlist.
          */
-        const std::vector<std::string> &get_playlist() const;
+        const std::vector<Track> &get_playlist() const;
 
         /**
          * @brief Checks whether the playlist is empty.
@@ -80,11 +75,23 @@ namespace AudioPlayer
          * @brief Returns the index of the current audio track.
          * @return The index of the current audio track.
          */
-        uint32_t get_current_track_index() const;
+        std::optional<uint32_t> get_current_track_number() const;
+
+        /**
+         * @brief Returns the name of the current track
+         * @return The name of the track
+         */
+        std::string get_current_track_name() const;
+
+        /**
+         * @brief Return true if the playlist is not empty else false
+         * @return the assertion whether there is a track or not
+         */
+        bool is_there_track_to_play() const;
 
     private:
-        std::vector<std::string> m_tracks; ///< The vector of tracks in the playlist.
-        uint32_t m_current_track_index;    ///< The index of the current audio track.
+        std::vector<Track> m_tracks;                   ///< The vector of tracks in the playlist.
+        std::optional<uint32_t> m_current_track_index; ///< The index of the current audio trackhas no value when m_tracks is empty
     };
 
 }

@@ -107,7 +107,7 @@ namespace AudioPlayer
     void StateMachine::next()
     { //[1] if not Stopped -> stop
         LOG("DEV", "");
-
+        bool iv_was_not_stopped = false;
         std::visit(
             [&](auto &state)
             {
@@ -115,6 +115,7 @@ namespace AudioPlayer
                 if constexpr (!std::is_same_v<T, Stopped>)
 
                 {
+                    iv_was_not_stopped = true;
                     LOG("DEV", "State different from stop, transition to stop");
                     m_state = State{Stopped{}};
                     auto iv_state = std::get<Stopped>(m_state);
@@ -128,14 +129,16 @@ namespace AudioPlayer
                    { strategy.next(m_executor); },
                    m_playing_strategy);
         //[3] start again
-        LOG("DEV", "Start");
-
-        start_pause();
+        if (iv_was_not_stopped)
+        {
+            LOG("DEV", "Was not stopped start again");
+            start_pause();
+        }
     }
 
     void StateMachine::previous()
     {
-        // if not Stopped -> stop
+        bool iv_was_not_stopped = false;
         std::visit(
             [&](auto &state)
             {
@@ -144,6 +147,7 @@ namespace AudioPlayer
 
                 {
                     LOG("DEV", "State different from stop, transition to stop");
+                    iv_was_not_stopped = true;
                     m_state = State{Stopped{}};
                     auto iv_state = std::get<Stopped>(m_state);
                     iv_state.exec_stop(m_executor);
@@ -155,10 +159,11 @@ namespace AudioPlayer
         std::visit([&](auto &strategy)
                    { strategy.previous(m_executor); },
                    m_playing_strategy);
-        // start again
-        LOG("DEV", "Start");
-
-        start_pause();
+        if (iv_was_not_stopped)
+        {
+            LOG("DEV", "Was not stopped start again");
+            start_pause();
+        }
     }
 
     void StateMachine::remove_track(uint32_t mv_track_number)
@@ -168,24 +173,29 @@ namespace AudioPlayer
         if (m_executor.get_current_track_number().has_value()) // if playlist has tracks
         {
             LOG("DEV", "track number has value");
-
-            if (mv_track_number == m_executor.get_current_track_number().value())
+            uint32_t iv_nb_of_current_track_in_playlist = m_executor.get_current_track_number().value();
+            if (mv_track_number == iv_nb_of_current_track_in_playlist)
             { // if the current track is being remove,
-                LOG("DEV", "Remove same track as current");
+                LOG("DEV", "Remove same track number (" + std::to_string(iv_nb_of_current_track_in_playlist) + ") as current track");
 
                 std::visit(
                     [&](auto &state)
                     {
                         using T = std::decay_t<decltype(state)>;
-                        if constexpr (std::is_same_v<T, Started>)
-                        { // stop the playing, remove the track and resume the playing else if it was started
+
+                        if constexpr (std::is_same_v<T, Stopped>)
+                        { // if current index is about to get deleted, but it is stopped just do the work
+                            LOG("DEV", "State stop, remove track");
+
+                            m_executor.remove_track(mv_track_number);
+                        }
+                        if constexpr (!std::is_same_v<T, Stopped>)
+                        { // if something was playing or stopped, stop before, do the work and then start again
+                            LOG("DEV", "State not stop, remove stop, remove track and start");
+
                             stop();
                             m_executor.remove_track(mv_track_number);
                             start_pause();
-                        }
-                        if constexpr (!std::is_same_v<T, Started>)
-                        {
-                            m_executor.remove_track(mv_track_number); // else only remove the track
                         }
                     },
                     m_state);
@@ -194,6 +204,10 @@ namespace AudioPlayer
             {
                 m_executor.remove_track(mv_track_number); // if the current track is not remove just remove the track of index mv_track_number
             }
+        }
+        else
+        {
+            LOG("DEV", "Current track number has value");
         }
     }
 }

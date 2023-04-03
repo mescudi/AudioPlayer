@@ -4,11 +4,11 @@
 #include "Logger.hpp"
 namespace AudioPlayer
 {
-    PlayerManager::PlayerManager(const IOutputWriter &mv_output_writer) : m_context(),
-                                                                          m_system_conf(),
-                                                                          m_output(m_context, mv_output_writer),
-                                                                          m_executor(m_context, m_system_conf, m_output),
-                                                                          m_state_machine(m_executor, m_context)
+    PlayerManager::PlayerManager(const IOutputWriter &mv_output_writer) : m_system_conf(),
+                                                                          m_playlist(),
+                                                                          m_output(m_playlist, mv_output_writer),
+                                                                          m_executor(m_playlist, m_system_conf, m_output),
+                                                                          m_state_machine(m_executor)
 
     {
         displaySystemFiles();
@@ -35,16 +35,30 @@ namespace AudioPlayer
     void PlayerManager::handleCommand(std::shared_ptr<const RemoveTrackCommand> cmd)
     {
         LOG("DEV", "");
-
-        m_executor.remove_track(cmd->m_track_number);
+        if (m_playlist.is_there_track_to_play())
+        {
+            m_state_machine.remove_track(cmd->m_track_number);
+        }
+        else
+        {
+            m_output.display_message("No track in the playlist, before removing add one with add_track \'name of your track\'");
+        }
     }
     void PlayerManager::handleCommand(std::shared_ptr<const RemoveDuplicatesCommand> cmd)
     {
-        m_executor.remove_duplicates();
+        LOG("DEV", "");
+        if (m_playlist.is_there_track_to_play())
+        {
+            m_executor.remove_duplicates();
+        }
+        else
+        {
+            m_output.display_message("No track in the playlist, before removing add one with add_track \'name of your track\'");
+        }
     }
     void PlayerManager::handleCommand(std::shared_ptr<const PlayPauseCommand> cmd)
     {
-        if (m_context.is_there_track_to_play())
+        if (m_playlist.is_there_track_to_play())
         {
             m_state_machine.start_pause();
         }
@@ -55,7 +69,7 @@ namespace AudioPlayer
     }
     void PlayerManager::handleCommand(std::shared_ptr<const StopCommand> cmd)
     {
-        if (m_context.is_there_track_to_play())
+        if (m_playlist.is_there_track_to_play())
         {
             m_state_machine.stop();
         }
@@ -67,7 +81,7 @@ namespace AudioPlayer
     void PlayerManager::handleCommand(std::shared_ptr<const NextCommand> cmd)
     {
         // appeler le visitor correspondant
-        if (m_context.is_there_track_to_play())
+        if (m_playlist.is_there_track_to_play())
         {
             m_state_machine.next();
         }
@@ -79,7 +93,7 @@ namespace AudioPlayer
     void PlayerManager::handleCommand(std::shared_ptr<const PreviousCommand> cmd)
     {
         // appeler le visitor correspondant
-        if (m_context.is_there_track_to_play())
+        if (m_playlist.is_there_track_to_play())
         {
             m_state_machine.previous();
         }

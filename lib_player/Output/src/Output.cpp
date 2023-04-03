@@ -2,8 +2,8 @@
 namespace AudioPlayer
 {
 
-    Output::Output(const IPlayerContext &mv_player_context, const IOutputWriter &mv_output_writer)
-        : m_player_context(mv_player_context),
+    Output::Output(const PlayList &mv_playlist, const IOutputWriter &mv_output_writer)
+        : m_playlist(mv_playlist),
           m_output_writer(mv_output_writer)
 
     {
@@ -16,20 +16,48 @@ namespace AudioPlayer
 
     void Output::display_started() const
     {
-        display_message("Playing " + m_player_context.get_current_track_name());
+        if (m_playlist.get_current_track_name() == "")
+        {
+            display_message("No current track to play");
+        }
+        else
+        {
+            display_message("Playing " + m_playlist.get_current_track_name());
+        }
     }
     void Output::display_stopped() const
     {
-        display_message(m_player_context.get_current_track_name() + "Player Stopped ");
+        if (m_playlist.get_current_track_name() == "")
+        {
+            display_message("No current track to stop");
+        }
+        else
+        {
+            display_message(m_playlist.get_current_track_name() + " Stopped ");
+        }
     }
     void Output::display_paused() const
     {
-        display_message(m_player_context.get_current_track_name() + "Player Paused ");
+        if (m_playlist.get_current_track_name() == "")
+        {
+            display_message("No current track to pause");
+        }
+        else
+        {
+            display_message(m_playlist.get_current_track_name() + " Paused ");
+        }
     }
 
     void Output::display_resumed() const
     {
-        display_message(m_player_context.get_current_track_name() + "Player Resumed ");
+        if (m_playlist.get_current_track_name() == "")
+        {
+            display_message("No current track to resume");
+        }
+        else
+        {
+            display_message(m_playlist.get_current_track_name() + " Resumed ");
+        }
     }
 
     void Output::display_repeat() const

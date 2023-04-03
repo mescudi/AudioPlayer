@@ -1,7 +1,7 @@
 #ifndef OUTPUT_HPP // include guard
 #define OUTPUT_HPP
 #include "IOutput.hpp"
-#include "IPlayerContext.hpp"
+#include "PlayList.hpp"
 #include "IOutputWriter.hpp"
 
 #include <vector>
@@ -19,10 +19,10 @@ namespace AudioPlayer
         /**
          * @brief Constructor that takes in a player context and an output writer
          *
-         * @param player_context The context of the audio player
+         * @param mv_playlist The playlist accessing object
          * @param output_writer The output writer used to display messages
          */
-        Output(const IPlayerContext &player_context, const IOutputWriter &output_writer);
+        Output(const PlayList &mv_playlist, const IOutputWriter &output_writer);
 
         /**
          * @brief Virtual destructor to ensure proper cleanup of derived classes
@@ -75,8 +75,8 @@ namespace AudioPlayer
         void display_random() const override;
 
     private:
-        const IPlayerContext &m_player_context; /*>! reference to the shared context*/
-        const IOutputWriter &m_output_writer;   /*>! reference to the output writer*/
+        const PlayList &m_playlist;           /*>! reference to the playlist*/
+        const IOutputWriter &m_output_writer; /*>! reference to the output writer*/
     };
 }
 

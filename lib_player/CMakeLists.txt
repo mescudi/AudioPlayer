@@ -8,8 +8,6 @@ set(INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/Input/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/Output/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/Output/interface
-    ${CMAKE_CURRENT_SOURCE_DIR}/PlayerContext/inc
-    ${CMAKE_CURRENT_SOURCE_DIR}/PlayerContext/interface
     ${CMAKE_CURRENT_SOURCE_DIR}/PlayerExecutor/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/PlayerExecutor/interface
     ${CMAKE_CURRENT_SOURCE_DIR}/PlayerManager/inc
@@ -22,7 +20,6 @@ set(INCLUDE_DIRS
 file(GLOB_RECURSE all_SRCS
     "${CMAKE_CURRENT_SOURCE_DIR}/Input/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Output/src/*.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/PlayerContext/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/PlayerExecutor/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/PlayerManager/src/*.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/PlayerStateMachine/src/*.cpp"

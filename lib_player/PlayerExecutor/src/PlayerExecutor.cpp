@@ -6,8 +6,8 @@
 namespace AudioPlayer
 {
 
-    PlayerExecutor::PlayerExecutor(IPlayerContext &mv_context, const SystemFiles::IConfigSystemFiles &mv_system_conf, IOutput &mv_output)
-        : m_context(mv_context), m_system_conf(mv_system_conf), m_playlist(), m_output(mv_output)
+    PlayerExecutor::PlayerExecutor(PlayList &mv_playlist, const SystemFiles::IConfigSystemFiles &mv_system_conf, IOutput &mv_output)
+        : m_system_conf(mv_system_conf), m_output(mv_output), m_playlist(mv_playlist)
     {
     }
 
@@ -47,18 +47,10 @@ namespace AudioPlayer
         if (iv_it != iv_map.end())
         {
             // If track is found, add it to playlist
-            auto iv_capture_play_list_was_empty = m_playlist.is_empty();
             m_playlist.add_track(mv_string);
 
             // Display message indicating track was added to playlist
             m_output.display_message("Track " + mv_string + " added to playlist");
-
-            // If the playlist was empty before the track was added, set current track name to the added track
-            if (iv_capture_play_list_was_empty)
-            {
-                m_context.set_current_track_name(mv_string); // index is already 0
-                m_output.display_message("Current track of playlist is now " + mv_string);
-            }
         }
         else
         {
@@ -74,7 +66,7 @@ namespace AudioPlayer
             m_playlist.remove_track(mv_number - 1, iv_track_name_to_remove);
             m_output.display_message("Track  " + std::to_string(mv_number) + " : " + iv_track_name_to_remove + " removed");
         }
-        catch (...)
+        catch (const std::out_of_range iv_e)
         {
             m_output.display_message("No track numbered " + std::to_string(mv_number));
         }
@@ -95,8 +87,8 @@ namespace AudioPlayer
         }
         else
         {
-            auto iv_track_name = m_context.get_current_track_name();
-            auto iv_track_number = m_playlist.get_current_track_index() + 1; // first index is 1 for a end user
+            auto iv_track_name = m_playlist.get_current_track_name();
+            auto iv_track_number = m_playlist.get_current_track_number().value(); // first index is 1 for a end user
 
             uint32_t iv_size_playlist = m_playlist.get_number_of_elements();
             // LOG("DEV", std::to_string(iv_size_playlist));
@@ -118,10 +110,10 @@ namespace AudioPlayer
         { // Display Mode display time
             std::string iv_track_info_string = "Info on playlist : \n - Names : ";
             std::vector<std::string> iv_durations;
-            for (const auto &track_name : m_playlist.get_playlist())
+            for (const auto &track : m_playlist.get_playlist())
             {
-                iv_track_info_string += "\n   - " + track_name;
-                iv_durations.push_back(m_system_conf.getFileSystemMap()[track_name].m_duration); // for all tracks in playlist search for their durations
+                iv_track_info_string += "\n   - " + track.m_track_name;
+                iv_durations.push_back(m_system_conf.getFileSystemMap()[track.m_track_name].m_duration); // for all tracks in playlist search for their durations
             }
             std::string iv_total_duration = "\n - Total Duration ";
             try
@@ -154,7 +146,7 @@ namespace AudioPlayer
         {
             std::string iv_string = "";
             m_playlist.set_previous_and_return(iv_string);
-            m_context.set_current_track_name(iv_string);
+            m_output.display_message("Previous track is :" + iv_string);
         }
         catch (const std::exception &iv_e)
         {
@@ -169,7 +161,7 @@ namespace AudioPlayer
         {
             std::string iv_string = "";
             m_playlist.set_next_and_return(iv_string);
-            m_context.set_current_track_name(iv_string);
+            m_output.display_message("Next track is :" + iv_string);
         }
         catch (const std::exception &iv_e)
         {
@@ -186,7 +178,6 @@ namespace AudioPlayer
 
             std::string iv_string = "";
             m_playlist.set_and_return_random_track(iv_string);
-            m_context.set_current_track_name(iv_string);
         }
         catch (const std::exception &iv_e)
         {
@@ -199,22 +190,17 @@ namespace AudioPlayer
         LOG("DEV", "");
         m_output.display_repeat();
     }
-
+    std::optional<uint32_t> PlayerExecutor::get_current_track_number() const
+    {
+        return m_playlist.get_current_track_number();
+    }
     void PlayerExecutor::add_all_system_tracks_to_playlist()
     {
-        auto iv_capture_play_list_was_empty = m_playlist.is_empty();
         std::string iv_display = "\nTracks added :\n";
         for (const auto iv_it : m_system_conf.getFileSystemMap())
         {
             m_playlist.add_track(iv_it.first);
             iv_display += "\n [" + iv_it.first + "]";
-        }
-        // if the original playlist was empty and we try to insert a non empty one
-        if (iv_capture_play_list_was_empty && !m_system_conf.getFileSystemMap().empty())
-        {
-            std::string iv_current_track = m_system_conf.getFileSystemMap().begin()->first;
-            m_context.set_current_track_name(iv_current_track); // index is already 0
-            iv_display += "\nCurrent track of playlist is now " + iv_current_track;
         }
 
         m_output.display_message(iv_display);

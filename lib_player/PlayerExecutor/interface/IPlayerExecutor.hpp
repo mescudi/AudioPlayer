@@ -1,6 +1,8 @@
 #ifndef IPLAYER_EXECUTOR_HPP // include guard
 #define IPLAYER_EXECUTOR_HPP
 #include <iostream>
+#include <optional>
+
 namespace AudioPlayer
 {
     /**
@@ -85,6 +87,11 @@ namespace AudioPlayer
          * @brief Plays the same track again.
          */
         virtual void set_same_track() = 0;
+
+        /**
+         * @brief Get the number in the playlist of the track playing
+         */
+        virtual std::optional<uint32_t> get_current_track_number() const = 0;
     };
 
 }
