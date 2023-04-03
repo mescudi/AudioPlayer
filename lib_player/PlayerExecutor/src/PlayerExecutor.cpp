@@ -82,12 +82,18 @@ namespace AudioPlayer
     }
     void PlayerExecutor::remove_duplicates()
     {
+        try
+        {
+            m_playlist.remove_duplicates();
+            m_output.display_message("duplicates Removed");
+            show_playlist();
+        }
 
-        m_playlist.remove_duplicates();
-        m_output.display_message("duplicates Removed");
-        show_playlist();
+        catch (const std::out_of_range iv_e)
+        {
+            m_output.display_message("No track to remove ");
+        }
     }
-
     void PlayerExecutor::show_track()
     {
         if (m_playlist.is_empty())
@@ -183,10 +189,11 @@ namespace AudioPlayer
         LOG("DEV", "");
         try
         {
-            m_output.display_repeat();
+            m_output.display_random();
 
             std::string iv_string = "";
             m_playlist.set_and_return_random_track(iv_string);
+            m_output.display_message("Next track is :" + iv_string);
         }
         catch (const std::exception &iv_e)
         {
@@ -214,5 +221,4 @@ namespace AudioPlayer
 
         m_output.display_message(iv_display);
     }
-
 }

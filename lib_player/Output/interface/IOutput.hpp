@@ -69,9 +69,10 @@ namespace AudioPlayer
         virtual void display_random() const = 0;
 
         /**
-         * @brief Virtual destructor to ensure proper cleanup of derived classes
-         *
+         * @brief displays a message to show all audio file present on system
          */
+        virtual void displaySystemFiles() const = 0;
+
         virtual ~IOutput(){};
     };
 }

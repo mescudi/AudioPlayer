@@ -62,12 +62,12 @@ namespace AudioPlayer
 
     void Output::display_repeat() const
     {
-        display_message(" Repeat Mode (Next and Previous tracks are the current one");
+        display_message("Same Track (Repeat Mode)");
     }
 
     void Output::display_random() const
     {
-        display_message(" Random Mode Next and Previous tracks are the random");
+        display_message("(Random Mode)");
     }
 
     void Output::displaySystemFiles() const // deplacer

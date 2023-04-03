@@ -116,14 +116,75 @@ namespace AudioPlayer
 
     void PlayList::remove_duplicates()
     {
-        /* This method uses the std::unique function from the C++ standard library,
-         * which returns an iterator pointing to the first element of a sequence without duplicates.
-         * Then, the elements between this iterator and the end of the vector are removed using the erase method.
-         * The operator== function is also defined to compare two objects of type Track based on
-         * their track name m_track_name. This function is used by the std::unique function to compare the elements of the vector. */
-        std::vector<Track>::iterator new_end = std::unique(m_tracks.begin(), m_tracks.end());
-        m_tracks.erase(new_end, m_tracks.end());
+
+        if (m_tracks.empty())
+        {
+            throw std::out_of_range("Le vecteur est vide.");
+        }
+        // unordered set to store unique tracks
+        std::unordered_set<Track, TrackHash> track_set;
+
+        // get the index of the current track, it it exist
+        auto current_track = m_current_track_index.value_or(-1);
+        // Initialize an iterator to the beginning of the track vector
+        auto it = m_tracks.begin();
+        while (it != m_tracks.end())
+        {
+            // Check if the current track is not the current index
+            if (it - m_tracks.begin() != current_track)
+            {
+                // Check if the current track can be inserted into the track set
+                if (track_set.insert(*it).second)
+                {
+                    // If it can, increment the iterator
+                    ++it;
+                }
+                else
+                {
+                    it = m_tracks.erase(it);
+                }
+            }
+            else
+            {
+                // If it is the current index, just increment the iterator
+                ++it;
+            }
+        }
+
+        // Check if the current track needs to be updated
+        if (current_track >= 0 && current_track <= m_tracks.size() - 1)
+        {
+            // Find the new current track based on its name
+            auto current_track_name = m_tracks[current_track].m_track_name;
+            // Find the range of duplicates for the current track
+
+            auto duplicates_begin = std::find_if(m_tracks.begin(), m_tracks.end(), [&](const Track &track)
+                                                 { return track.m_track_name == current_track_name && &track != &m_tracks[current_track]; });
+            auto duplicates_end = std::find_if_not(duplicates_begin, m_tracks.end(), [&](const Track &track)
+                                                   { return track.m_track_name == current_track_name && &track != &m_tracks[current_track]; });
+            // Erase the duplicates from the track vector
+
+            m_tracks.erase(duplicates_begin, duplicates_end);
+        }
+
+        // Update the current track index if necessary
+        if (current_track >= 0 && current_track <= m_tracks.size() - 1 && m_tracks[current_track].m_track_name != track_set.begin()->m_track_name)
+        {
+            // Find the new current track based on its name
+            auto new_current_track = std::find_if(m_tracks.begin(), m_tracks.end(), [&](const Track &track)
+                                                  { return track.m_track_name == m_tracks[current_track].m_track_name; });
+            if (new_current_track != m_tracks.end())
+            {
+                // Set the new current track index to the position of the found track in the vector
+                m_current_track_index = std::distance(m_tracks.begin(), new_current_track);
+            }
+            else
+            { // Set the current track index to null
+                m_current_track_index = std::nullopt;
+            }
+        }
     }
+
     void PlayList::set_and_return_random_track(std::string &mv_track_name)
     {
         // Vérifie que le vecteur n'est pas vide
@@ -180,10 +241,5 @@ namespace AudioPlayer
     bool PlayList::is_there_track_to_play() const
     {
         return !m_tracks.empty();
-    }
-
-    bool operator==(const Track &lhs, const Track &rhs)
-    {
-        return lhs.m_track_name == rhs.m_track_name;
     }
 }

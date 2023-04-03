@@ -67,8 +67,22 @@ namespace AudioPlayer
          */
         uint32_t get_number_of_elements() const;
 
+        /**
+         * @brief change the current track to the next in the
+         *  playlist and return the string in reference of the function parameter of the new track
+         */
         void set_next_and_return(std::string &);
+
+        /**
+         * @brief change the current track to the previous in the
+         *  playlist and return the string in reference of the function parameter of the new track
+         */
         void set_previous_and_return(std::string &);
+
+        /**
+         * @brief change the current track to a random one in the
+         *  playlist and return the string in reference of the function parameter of the new track
+         */
         void set_and_return_random_track(std::string &);
 
         /**

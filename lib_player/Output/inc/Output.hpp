@@ -3,6 +3,7 @@
 #include "IOutput.hpp"
 #include "PlayList.hpp"
 #include "IOutputWriter.hpp"
+#include "IConfigSystemFiles.hpp"
 
 #include <vector>
 
@@ -22,7 +23,7 @@ namespace AudioPlayer
          * @param mv_playlist The playlist accessing object
          * @param output_writer The output writer used to display messages
          */
-        Output(const PlayList &mv_playlist, const IOutputWriter &output_writer);
+        Output(const PlayList &mv_playlist, const IOutputWriter &output_writer, const SystemFiles::IConfigSystemFiles &m_system_conf);
 
         /**
          * @brief Virtual destructor to ensure proper cleanup of derived classes
@@ -74,9 +75,15 @@ namespace AudioPlayer
          */
         void display_random() const override;
 
+        /**
+         * @brief displays a message to show all audio file present on system
+         */
+        void displaySystemFiles() const override;
+
     private:
-        const PlayList &m_playlist;           /*>! reference to the playlist*/
-        const IOutputWriter &m_output_writer; /*>! reference to the output writer*/
+        const PlayList &m_playlist;                           /*>! reference to the playlist*/
+        const IOutputWriter &m_output_writer;                 /*>! reference to the output writer*/
+        const SystemFiles::IConfigSystemFiles &m_system_conf; /*>! reference to the conf of the filesytem accessing object */
     };
 }
 
